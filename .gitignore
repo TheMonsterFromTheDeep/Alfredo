@@ -1,0 +1,7 @@
+#Ignore unimportant build metadata
+
+nbproject
+build
+dist/README.txt
+build.xml
+manifest.mf
