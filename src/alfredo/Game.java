@@ -2,6 +2,7 @@ package alfredo;
 
 import alfredo.input.Keys;
 import alfredo.input.Mouse;
+import alfredo.paint.Canvas;
 import alfredo.scene.Scene;
 import alfredo.timing.Interval;
 import java.awt.Graphics;
@@ -22,8 +23,7 @@ public class Game extends Interval {
     private static final int MIN_HEIGHT = 64;
     
     private final class GamePanel extends JPanel {
-        BufferedImage buffer;
-        Graphics bufGraphics;
+        Canvas canvas;
         
         int bufWidth, bufHeight; //The size that the buffer is drawn at
         int bufX, bufY; //The position that the buffer is drawn at
@@ -39,29 +39,28 @@ public class Game extends Interval {
             addMouseWheelListener(adapter);
             addMouseMotionListener(adapter);
             
-            buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-            bufGraphics = buffer.createGraphics();
+            canvas = new Canvas(width, height);
         }
         
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
-            scene.draw();
-            g.drawImage(buffer, bufX, bufY, bufWidth, bufHeight, null);
+            scene.draw(canvas);
+            canvas.render(g, bufX, bufY, bufWidth, bufHeight);
             repaint();
         }
         
         private void doGraphics() {
             //Recalculates size and offset of graphical buffer
-            if((float)panel.getWidth() / buffer.getWidth() > (float)panel.getHeight() / buffer.getHeight()) {
+            if((float)panel.getWidth() / canvas.width > (float)panel.getHeight() / canvas.height) {
                 bufHeight = panel.getHeight();
-                bufWidth = (int)(bufHeight * ((float)buffer.getWidth() / buffer.getHeight()));
+                bufWidth = (int)(bufHeight * ((float)canvas.width / canvas.height));
                 bufX = (panel.getWidth() - bufWidth) / 2;
                 bufY = 0;
             }
             else {
                 bufWidth = panel.getWidth();
-                bufHeight = (int)(bufWidth * ((float)buffer.getHeight() / buffer.getWidth()));
+                bufHeight = (int)(bufWidth * ((float)canvas.height / canvas.width));
                 bufY = (panel.getHeight() - bufHeight) / 2;
                 bufX = 0;
             }

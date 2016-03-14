@@ -1,6 +1,7 @@
 package alfredo.scene;
 
 import alfredo.Game;
+import alfredo.paint.Canvas;
 
 /**
  * Each Scene is some sort of graphical component of a game with its own graphical
@@ -11,7 +12,7 @@ public abstract class Scene {
     public static Scene getEmptyScene() {
         return new Scene(null) { //Null parent does not matter; empty scene will never call any parent methods
             @Override
-            public void draw() { }
+            public void draw(Canvas canvas) { }
 
             @Override
             public void loop() { }
@@ -24,6 +25,6 @@ public abstract class Scene {
         this.parent = parent;
     }
 
-    public abstract void draw();
+    public abstract void draw(Canvas canvas);
     public abstract void loop();
 }
