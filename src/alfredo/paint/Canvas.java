@@ -27,4 +27,8 @@ public class Canvas {
         graphics.setColor(c);
         graphics.fillRect(0, 0, width, height);
     }
+    
+    public void draw(Graphic g, int x, int y) {
+        g.draw(graphics, x, y);
+    }
 }
