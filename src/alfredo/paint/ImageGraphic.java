@@ -2,16 +2,17 @@ package alfredo.paint;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 
 public class ImageGraphic implements Graphic {
-    Image image;
+    BufferedImage image;
     
-    public ImageGraphic(Image image) {
+    public ImageGraphic(BufferedImage image) {
         this.image = image;
     }
 
     @Override
-    public void draw(Graphics graphics, int x, int y) {
-        graphics.drawImage(image, x, y, null);
+    public BufferedImage render() {
+        return image;
     }
 }

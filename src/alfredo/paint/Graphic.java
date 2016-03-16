@@ -1,6 +1,6 @@
 package alfredo.paint;
 
-import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
 /**
  * A Graphic is simply something that can be drawn to a Canvas.
@@ -9,5 +9,6 @@ import java.awt.Graphics;
  * @author TheMonsterFromTheDeep
  */
 public interface Graphic {
-    void draw(Graphics graphics, int x, int y);
+    //void draw(Graphics graphics, int x, int y);
+    BufferedImage render();
 }
