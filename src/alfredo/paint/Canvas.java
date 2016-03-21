@@ -17,12 +17,18 @@ public class Canvas {
     public final int width;
     public final int height;
     
+    private final float offsetx;
+    private final float offsety;
+    
     public Canvas(int width, int height) {
         buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         graphics = buffer.createGraphics();
         
         this.width = width;
         this.height = height;
+        
+        this.offsetx = width / 2f;
+        this.offsety = height / 2f;
     }
     
     public void render(Graphics g, int x, int y, int width, int height) {
@@ -35,7 +41,7 @@ public class Canvas {
     }
     
     public void draw(Graphic g, float x, float y) {
-        graphics.drawImage(g.render(), (int)x, (int)y, null);
+        graphics.drawImage(g.render(), (int)(x + offsetx), height - (int)(y + offsety), null);
     }
     
     /**
@@ -92,6 +98,6 @@ public class Canvas {
         AffineTransformOp op = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
         op.filter(orig, filter);
         
-        graphics.drawImage(filter, (int)x + min.x, (int)y + min.y, null);
+        graphics.drawImage(filter, (int)(x + min.x + offsetx), height - (int)(y + min.y + offsety), null);
     }
 }
