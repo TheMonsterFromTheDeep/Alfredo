@@ -47,20 +47,24 @@ public class Mouse {
 
         @Override
         public void mouseDragged(MouseEvent e) {
-            mousex = e.getX();
-            mousey = e.getY();
+            mousex = (int)((e.getX() - screenX) / screenScale);
+            mousey = (int)((e.getY() - screenY) / screenScale);
         }
 
         @Override
         public void mouseMoved(MouseEvent e) {
-            mousex = e.getX();
-            mousey = e.getY();
+            mousex = (int)((e.getX() - screenX) / screenScale);
+            mousey = (int)((e.getY() - screenY) / screenScale);
         }
     }
     
     private boolean lmbDown;
     private boolean mmbDown;
     private boolean rmbDown;
+    
+    private double screenScale; //Used to properly project mouse coordinates to the screen
+    private int screenX;
+    private int screenY;
     
     private int mousex, mousey;
     
@@ -82,8 +86,32 @@ public class Mouse {
     }
     
     public static Handler init() {
-        mouse = new Mouse();
-        return mouse.handler;
+        if(mouse == null) {
+            mouse = new Mouse();
+            return mouse.handler;
+        }
+        return null;
+    }
+    
+    /**
+     * Gets the Mouse with the specified Handler.
+     * 
+     * Meant to be used by the Game so that it can properly
+     * update how the mouse updates its position.
+     * @param handler The Handler to validate.
+     * @return The static mouse object, if the Handler is valid; otherwise null.
+     */
+    public static Mouse getMouse(Handler handler) {
+        if(handler == mouse.handler) {
+            return mouse;
+        }
+        return null;
+    }
+    
+    public void updateScreen(int screenX, int screenY, double scale) {
+        this.screenX = screenX;
+        this.screenY = screenY;
+        this.screenScale = scale;
     }
     
     public static boolean isLMBDown() { return mouse.lmbDown; }

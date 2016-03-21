@@ -28,13 +28,16 @@ public class Game extends Interval {
         int bufWidth, bufHeight; //The size that the buffer is drawn at
         int bufX, bufY; //The position that the buffer is drawn at
         
+        Mouse mouse;
+        
         public GamePanel(int width, int height) {
             this.setSize(width, height);
             this.setPreferredSize(new java.awt.Dimension(width, height));
             
             this.setBackground(new java.awt.Color(0x0));
             
-            MouseAdapter adapter = Mouse.init();
+            Mouse.Handler adapter = Mouse.init();
+            mouse = Mouse.getMouse(adapter);
             addMouseListener(adapter);
             addMouseWheelListener(adapter);
             addMouseMotionListener(adapter);
@@ -50,7 +53,12 @@ public class Game extends Interval {
             repaint();
         }
         
-        private void doGraphics() {
+        
+        /**
+         * Updates buffer states and mouse factors so that they properly
+         * correspond to the size of the window.
+         */
+        private void updateSize() {
             //Recalculates size and offset of graphical buffer
             if((float)panel.getWidth() / canvas.width > (float)panel.getHeight() / canvas.height) {
                 bufHeight = panel.getHeight();
@@ -64,6 +72,8 @@ public class Game extends Interval {
                 bufY = (panel.getHeight() - bufHeight) / 2;
                 bufX = 0;
             }
+            //Update mouse so that coordinates are properly projected
+            mouse.updateScreen(bufX, bufY, (double)bufWidth / canvas.width);
         }
     }
     
@@ -87,7 +97,7 @@ public class Game extends Interval {
                     
                     GameFrame.this.setSize(width, height);
                     
-                    panel.doGraphics();
+                    panel.updateSize();
                 }
             });
         }
