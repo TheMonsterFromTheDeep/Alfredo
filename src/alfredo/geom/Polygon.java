@@ -56,12 +56,11 @@ public class Polygon {
         }
         
         for(Point p : points) {
-            int i, j;
-            for (i = 0, j = points.length - 1; i < points.length; j = i++) {
-              if ( ((points[i].y > p.y) != (points[j].y > p.y)) &&
-                (p.x < (points[j].x-points[i].x) * (p.y-points[i].y) / (points[j].y-points[i].y) + points[i].x) )
-                { return true; } //Any intersection at all means that the polygons do in fact intersect
-            }
+            if(check.contains(p)) { return true; }
+        }
+        
+        for(Point p : check.points) {
+            if(contains(p)) { return true; }
         }
         
         return false;

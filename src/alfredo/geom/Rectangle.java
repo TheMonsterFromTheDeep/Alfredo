@@ -3,12 +3,12 @@ package alfredo.geom;
 import alfredo.geom.Point;
 
 public class Rectangle {
-    public int x;
-    public int y;
-    public int width;
-    public int height;
+    public float x;
+    public float y;
+    public float width;
+    public float height;
     
-    public Rectangle(int x, int y, int width, int height) {
+    public Rectangle(float x, float y, float width, float height) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -29,34 +29,34 @@ public class Rectangle {
         this.height = size.y;
     }
     
-    public int left() { return x; }
-    public int top() { return y; }
-    public int right() { return x + width; }
-    public int bottom() { return y + height; }
+    public float left() { return x; }
+    public float top() { return y; }
+    public float right() { return x + width; }
+    public float bottom() { return y + height; }
     
-    public void setLeft(int x) { this.width += (this.x - x); this.x = x; }
-    public void setTop(int y) { this.height += (this.y - y); this.y = y; }
-    public void setRight(int x) { this.width = (x - this.x); }
-    public void setBottom(int y) { this.height = (y - this.y); }
+    public void setLeft(float x) { this.width += (this.x - x); this.x = x; }
+    public void setTop(float y) { this.height += (this.y - y); this.y = y; }
+    public void setRight(float x) { this.width = (x - this.x); }
+    public void setBottom(float y) { this.height = (y - this.y); }
     
-    public void shift(int dx, int dy) {
+    public void shift(float dx, float dy) {
         x += dx;
         y += dy;
     }
     
-    public boolean contains(int x, int y) {
+    public boolean contains(float x, float y) {
         return (x >= this.x && x < this.x + width && y >= this.y && y < this.y + width);
     }
     
     public boolean intersects(Rectangle r) {
-        int thisx = x;
-        int thisy = y;
-        int thiswidth = width;
-        int thisheight = height;
-        int rx = r.x;
-        int ry = r.y;
-        int rwidth = r.width;
-        int rheight = r.height;
+        float thisx = x;
+        float thisy = y;
+        float thiswidth = width;
+        float thisheight = height;
+        float rx = r.x;
+        float ry = r.y;
+        float rwidth = r.width;
+        float rheight = r.height;
         return ((thisx + thiswidth > rx && thisx + thiswidth < rx + rwidth) || (rx + rwidth > thisx && rx + rwidth < thisx + thiswidth)) && ((thisy + thisheight > ry && thisy + thisheight < ry + rheight) || (ry + rheight > thisy && ry + rheight < thisy + thisheight));
     }
 }
