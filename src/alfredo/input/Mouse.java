@@ -62,9 +62,9 @@ public class Mouse {
     private boolean mmbDown;
     private boolean rmbDown;
     
-    private double screenScale; //Used to properly project mouse coordinates to the screen
-    private int screenX;
-    private int screenY;
+    private double screenScale = 1; //Used to properly project mouse coordinates to the screen
+    private int screenX = 0;
+    private int screenY = 0;
     
     private int mousex, mousey;
     

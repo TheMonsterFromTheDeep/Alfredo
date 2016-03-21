@@ -89,7 +89,7 @@ public class Canvas {
         
         at.preConcatenate(AffineTransform.getTranslateInstance(-min.x, -min.y));
         
-        AffineTransformOp op = new AffineTransformOp(at, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+        AffineTransformOp op = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
         op.filter(orig, filter);
         
         graphics.drawImage(filter, (int)x + min.x, (int)y + min.y, null);

@@ -27,6 +27,12 @@ public class Polygon {
         calculateBounds();
     }
     
+    private Polygon(Point[] p, Line[] l, Rectangle r) {
+        this.points = p;
+        this.lines = l;
+        this.bounds = r;
+    }
+    
     public boolean contains(Point p) {
         //Thanks to http://stackoverflow.com/questions/217578/how-can-i-determine-whether-a-2d-point-is-within-a-polygon#answer-2922778
         int i, j;
@@ -40,25 +46,36 @@ public class Polygon {
     }
     
     /**
-     * Returns whether this polygon intersects the other polygon,
-     * in the sense that their edges are intersecting or one
-     * lies totally within the other.
-     * @param check The polygon to test for intersection.
-     * @return Whether the polygons intersect.
+     * Returns whether any of the edges of this Polygon are intersecting with
+     * the edges of the specified Polygon.
+     * 
+     * This does not return true if one Polygon is merely contained within the other,
+     * but not actually intersecting.
+     * @param check The Polygon to check intersection with.
+     * @return Whether the Polygons are intersecting.
      */
     public boolean intersects(Polygon check) {
-        if(!bounds.intersects(check.bounds)) { System.out.println("No bounds!"); return false; }
+        if(!bounds.intersects(check.bounds)) { return false; }
 
         for(Line line1 : lines) {
             for(Line line2 : check.lines) {
                 if(line1.intersects(line2)) { return true; }
             }
         }
+
         
-        for(Point p : points) {
-            if(check.contains(p)) { return true; }
-        }
-        
+        return false;
+    }
+    
+    /**
+     * Returns whether this Polygon contains any point in the specified Polygon.
+     * 
+     * This does not test for whether a Polygon is *completely* contained, only
+     * if it is at least partially contained.
+     * @param check The Polygon to check.
+     * @return Whether this Polygon contains any part of the specified Polygon.
+     */
+    public boolean contains(Polygon check) {
         for(Point p : check.points) {
             if(contains(p)) { return true; }
         }
@@ -99,7 +116,36 @@ public class Polygon {
         calculateBounds();
     }
     
-    public void printBounds() {
-        System.out.println("Bounds: " + bounds.x + ", " + bounds.y + "; " + bounds.right() + ", " + bounds.bottom());
+    public Polygon copy() {
+        Point[] newPoints = new Point[points.length];
+        Line[] newLines = new Line[lines.length];
+        for(int i = 0; i < newPoints.length; i++) {
+            newPoints[i] = new Point(points[i]);
+        }
+        for(int i = 0; i < newLines.length; i++) {
+            newLines[i] = new Line(newPoints[i], newPoints[i + 1]);
+        }
+        Rectangle newBounds = new Rectangle(bounds);
+        return new Polygon(newPoints, newLines, newBounds);
+    }
+    
+    /**
+     * Copies the specified Polygon's data into this Polygon.
+     * 
+     * Only copies the data if the Polygons have equal numbers of points.
+     * @param p The Polygon to copy.
+     */
+    public void copyFrom(Polygon p) {
+        //Due to the magic of pointers, this will completely copy everything!!!1!!
+        if(p.points.length == points.length) {
+            for(int i = 0; i < points.length; i++) {
+                points[i].x = p.points[i].x;
+                points[i].y = p.points[i].y;
+            }
+            bounds.x = p.bounds.x;
+            bounds.y = p.bounds.y;
+            bounds.width = p.bounds.width;
+            bounds.height = p.bounds.height;
+        }
     }
 }
