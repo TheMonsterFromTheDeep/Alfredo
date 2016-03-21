@@ -50,8 +50,8 @@ public class Skeleton {
     
     //Returns the position / direction of the Skeleton.
     //Convenientely, the position is *also* the anchor position.
-    public float getX() { return position.x + origin.x - center.x; }
-    public float getY() { return position.y + origin.y - center.y; }
+    public float getX() { return position.x - origin.x - center.x; }
+    public float getY() { return position.y - origin.y - center.y; }
     public double getDirection() { return direction; }
     
     public float getCenterX() { return origin.x + center.x; }
