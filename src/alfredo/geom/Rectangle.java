@@ -57,6 +57,6 @@ public class Rectangle {
         float ry = r.y;
         float rwidth = r.width;
         float rheight = r.height;
-        return ((thisx + thiswidth > rx && thisx + thiswidth < rx + rwidth) || (rx + rwidth > thisx && rx + rwidth < thisx + thiswidth)) && ((thisy + thisheight > ry && thisy + thisheight < ry + rheight) || (ry + rheight > thisy && ry + rheight < thisy + thisheight));
+        return ((thisx + thiswidth > rx && thisx + thiswidth <= rx + rwidth) || (rx + rwidth > thisx && rx + rwidth <= thisx + thiswidth)) && ((thisy + thisheight > ry && thisy + thisheight <= ry + rheight) || (ry + rheight > thisy && ry + rheight <= thisy + thisheight));
     }
 }

@@ -46,16 +46,28 @@ public class Line {
         return y_intercept() + (x * slope());
     }
     
+    private static boolean areEqual(float a, float b) {
+        return Math.abs(a - b) < 0.0001;
+    }
+    
+    private static boolean greaterOrEqual(float a, float b) {
+        return areEqual(a, b) || a > b;
+    }
+    
+    private static boolean lessOrEqual(float a, float b) {
+        return areEqual(a, b) || a < b;
+    }
+    
     /**
      * 
      * @param check The point to check.
      * @return Whether the point is inside the bounds of the line.
      */
     public boolean bounds(Point check) {
-        return ((check.x >= start.x && check.x <= end.x) || (check.x >= end.x && check.x <= start.x)) &&
-               ((check.y >= start.y && check.y <= end.y) || (check.y >= end.y && check.y <= start.y));
+        return ((greaterOrEqual(check.x, start.x) && lessOrEqual(check.x, end.x)) || (greaterOrEqual(check.x, end.x) && lessOrEqual(check.x, start.x))) &&
+               ((greaterOrEqual(check.y, start.y) && lessOrEqual(check.y, end.y)) || (greaterOrEqual(check.y, end.y) && lessOrEqual(check.y, start.y)));
     }
-    
+        
     public boolean intersects(Line check) {
         Point test = new Point(); //The point to test for
         if(vertical()) {
