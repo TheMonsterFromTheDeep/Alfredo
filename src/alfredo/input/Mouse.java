@@ -1,5 +1,6 @@
 package alfredo.input;
 
+import alfredo.geom.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
@@ -120,6 +121,8 @@ public class Mouse {
     
     public static int getMouseX() { return mouse.mousex; }
     public static int getMouseY() { return mouse.mousey; }
+    
+    public static Point getPosition() { return new Point(mouse.mousex, mouse.mousey); }
     
     public static double getScrollTilt() { return mouse.scrollTilt; }
     public static void resetScrollTilt() { mouse.scrollTilt = 0; }

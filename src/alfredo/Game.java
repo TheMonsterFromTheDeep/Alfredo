@@ -73,7 +73,7 @@ public class Game extends Interval {
                 bufX = 0;
             }
             //Update mouse so that coordinates are properly projected
-            mouse.updateScreen(bufX, bufY, (double)bufWidth / canvas.width);
+            mouse.updateScreen(bufX + bufWidth / 2, bufY + bufHeight / 2, (double)bufWidth / canvas.width);
         }
     }
     
