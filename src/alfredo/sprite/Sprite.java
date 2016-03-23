@@ -13,7 +13,7 @@ import alfredo.geom.Point;
  * the proper offscreen offset in scrolling games.
  * @author TheMonsterFromTheDeep
  */
-public class Sprite {
+public class Sprite extends Entity {
     public Skeleton current;
     
     public final void changeSkeleton(Skeleton s) {
@@ -29,5 +29,20 @@ public class Sprite {
     
     public boolean touches(Skeleton s) {
         return current.touches(s);
+    }
+
+    @Override
+    public float getLocalX() {
+        return current.getLocalX();
+    }
+
+    @Override
+    public float getLocalY() {
+        return current.getLocalY();
+    }
+
+    @Override
+    public double getLocalDirection() {
+        return current.getLocalDirection();
     }
 }

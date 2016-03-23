@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
  * a set of interchangeable Skeletons.
  * @author TheMonsterFromTheDeep
  */
-public class Skeleton {
+public class Skeleton extends Entity {
     public Graphic graphic; //The graphical appearance of the Skeleton
     
     private final Polygon base; //The original copy of the Skeleton's bounds
@@ -22,8 +22,8 @@ public class Skeleton {
     private Point center; //The center where the bounds and graphic are rotated / drawn with
     //When being drawn, the coordinates for the Skeleton are where the center point of the image is drawn
     
-    private Point position;
-    private double direction;
+    //private Point position;
+    //private double direction;
     
     public static Skeleton loadFromPath(String path) {
         return new Skeleton(Resources.getImage(path));
@@ -50,9 +50,12 @@ public class Skeleton {
     
     //Returns the position / direction of the Skeleton.
     //Convenientely, the position is *also* the anchor position.
-    public float getX() { return position.x - origin.x - center.x; }
-    public float getY() { return position.y - origin.y - center.y; }
-    public double getDirection() { return direction; }
+    @Override
+    public float getLocalX() { return position.x - origin.x - center.x; }
+    @Override
+    public float getLocalY() { return position.y - origin.y - center.y; }
+    @Override
+    public double getLocalDirection() { return direction; }
     
     public float getCenterX() { return origin.x + center.x; }
     public float getCenterY() { return origin.y + center.y; }
