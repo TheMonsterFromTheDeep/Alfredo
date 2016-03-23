@@ -26,12 +26,12 @@ public abstract class Entity implements Anchor {
     
     @Override
     public final float getX() {
-        return parent.getX() + getLocalX();
+        return (float)(parent.getX() + Math.cos(Math.toRadians(parent.getDirection())) * getLocalY() + Math.cos(Math.toRadians(parent.getDirection() + 90)) * getLocalX());
     }
     
     @Override
     public final float getY() {
-        return parent.getY() + getLocalY();
+        return (float)(parent.getY() + Math.sin(Math.toRadians(parent.getDirection())) * getLocalY() + Math.sin(Math.toRadians(parent.getDirection() + 90)) * getLocalX());
     }
     
     public abstract float getLocalX();
