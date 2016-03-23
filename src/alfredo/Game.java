@@ -103,10 +103,16 @@ public class Game extends Interval {
         }
     }
     
+    public static int getTick() {
+        return tick;
+    }
+    
     GameFrame frame;
     GamePanel panel;
     
     Scene scene;
+    
+    private static int tick;
     
     public Game(String title, int width, int height) {
         super(DEFAULT_DELAY);
@@ -118,6 +124,8 @@ public class Game extends Interval {
         frame.pack();
         
         scene = Scene.getEmptyScene();
+        
+        tick = 0;
     }
     
     public Game(String title) {
@@ -142,6 +150,7 @@ public class Game extends Interval {
     
     @Override
     public final void loop() {
+        tick++;
         scene.loop();
     }
     

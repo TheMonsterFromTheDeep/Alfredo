@@ -22,8 +22,8 @@ public class Skeleton extends Entity {
     private Point center; //The center where the bounds and graphic are rotated / drawn with
     //When being drawn, the coordinates for the Skeleton are where the center point of the image is drawn
     
-    //private Point position;
-    //private double direction;
+    private Point position;
+    private double direction;
     
     public static Skeleton loadFromPath(String path) {
         return new Skeleton(Resources.getImage(path));
@@ -49,14 +49,14 @@ public class Skeleton extends Entity {
     public Skeleton(Graphic graphic) { this(graphic, new Point(0, 0)); }
     
     //Returns the position / direction of the Skeleton.
-    //Convenientely, the position is *also* the anchor position.
     @Override
-    public float getLocalX() { return position.x - origin.x - center.x; }
+    public float getLocalX() { return position.x; }
     @Override
-    public float getLocalY() { return position.y - origin.y - center.y; }
+    public float getLocalY() { return position.y; }
     @Override
     public double getLocalDirection() { return direction; }
     
+    //Returns the relative position of the anchor point of the Skeleton. This should be subtracted from the position when drawing.
     public float getCenterX() { return origin.x + center.x; }
     public float getCenterY() { return origin.y + center.y; }
     
@@ -73,6 +73,18 @@ public class Skeleton extends Entity {
     public void moveY(float amount) {
         bounds.translate(0, amount);
         position.y += amount;
+    }
+    
+    @Override
+    public void setLocalX(float x) {
+        bounds.translate(position.x - x, 0);
+        position.x = x;
+    }
+    
+    @Override
+    public void setLocalY(float y) {
+        bounds.translate(0, position.y - y);
+        position.y = y;
     }
     
     /**

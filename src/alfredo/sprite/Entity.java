@@ -9,9 +9,6 @@ import alfredo.geom.Point;
  * @author TheMonsterFromTheDeep
  */
 public abstract class Entity implements Anchor {
-    protected Point position;
-    protected double direction;
-    
     private Anchor parent;
     
     public Entity() {
@@ -40,4 +37,27 @@ public abstract class Entity implements Anchor {
     public abstract float getLocalX();
     public abstract float getLocalY();
     public abstract double getLocalDirection();
+    public abstract void setLocalX(float x);
+    public abstract void setLocalY(float y);
+    
+    public void setParent(Anchor p, boolean retainPosition) {
+        if(p != null) {
+            if(retainPosition) {
+                float newX = getX() - p.getX();
+                float newY = getY() - p.getY();
+                setLocalX(newX);
+                setLocalY(newY);
+            }
+            parent = p;
+        }
+    }
+    
+    public void clearParent(boolean retainPosition) {
+        if(retainPosition) {
+            float newX = getX(), newY = getY();
+            setLocalX(newX);
+            setLocalY(newY);
+        }
+        parent = new Empty();
+    }
 }
