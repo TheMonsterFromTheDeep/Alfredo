@@ -118,11 +118,12 @@ public class Game extends Interval {
     private Dimension nonFullscreenSize;
     private java.awt.Point nonFullscreenPos;
     
-    public Game(String title, int width, int height) {
+    public Game(String title, int width, int height, double scalex, double scaley) {
         super(DEFAULT_DELAY);
         
         frame = new GameFrame(title);
         panel = new GamePanel(width, height);
+        panel.setPreferredSize(new Dimension((int)(width * scalex), (int)(height * scaley)));
         
         frame.add(panel);
         frame.pack();
@@ -138,12 +139,20 @@ public class Game extends Interval {
         tick = 0;
     }
     
+    public Game(String title, int width, int height, double scale) {
+        this(title, width, height, scale, scale);
+    }
+    
+    public Game(String title, int width, int height) {
+        this(title, width, height, 1);
+    }
+    
     public Game(String title) {
         this(title, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
     
     public Game(int width, int height) {
-        this("Untitled Game", width, height);
+        this("Untitled Game", width, height, 1);
     }
     
     public Game() {
