@@ -5,11 +5,10 @@ import alfredo.input.Mouse;
 import alfredo.paint.Canvas;
 import alfredo.scene.Scene;
 import alfredo.timing.Interval;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -115,6 +114,10 @@ public class Game extends Interval {
     
     private static int tick;
     
+    private boolean fullscreen = false;
+    private Dimension nonFullscreenSize;
+    private java.awt.Point nonFullscreenPos;
+    
     public Game(String title, int width, int height) {
         super(DEFAULT_DELAY);
         
@@ -123,6 +126,12 @@ public class Game extends Interval {
         
         frame.add(panel);
         frame.pack();
+        
+        nonFullscreenSize = new Dimension();
+        frame.getSize(nonFullscreenSize);
+        
+        nonFullscreenPos = new java.awt.Point();
+        frame.getLocation(nonFullscreenPos);
         
         scene = Scene.getEmptyScene();
         
@@ -158,4 +167,29 @@ public class Game extends Interval {
     public final void setScene(Scene scene) {
         this.scene = scene;
     }
+    
+    public void setFullscreen(boolean fullscreen) {
+        if(fullscreen) {
+            frame.getSize(nonFullscreenSize);
+            frame.getLocation(nonFullscreenPos);
+            frame.dispose(); //Dumb hack to prevent frame from blowing up
+            frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+            frame.setUndecorated(true);
+            frame.setVisible(true);
+            
+            this.fullscreen = true;
+        }
+        else {
+            frame.dispose();
+            frame.setExtendedState(JFrame.NORMAL);
+            frame.setSize(nonFullscreenSize);
+            frame.setLocation(nonFullscreenPos);
+            frame.setUndecorated(false);
+            frame.setVisible(true);
+            
+            this.fullscreen = false;
+        }
+    }
+    
+    public boolean isFullscreen() { return fullscreen; }
 }
