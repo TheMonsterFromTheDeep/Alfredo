@@ -11,6 +11,11 @@ public class Sprite extends Entity {
     protected Point position;
     protected double direction;
     
+    public Sprite() {
+        position = new Point(0, 0);
+        direction = 0;
+    }
+    
     public void update() { }
     public void draw(SpriteBatch sb) { }
 
