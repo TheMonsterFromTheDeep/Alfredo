@@ -38,4 +38,9 @@ public class Sprite extends Entity {
     public void setLocalY(float y) {
         position.y = y;
     }
+
+    @Override
+    public void setLocalDirection(double dir) {
+        direction = dir;
+    }
 }

@@ -39,6 +39,12 @@ public abstract class Entity implements Anchor {
     public abstract double getLocalDirection();
     public abstract void setLocalX(float x);
     public abstract void setLocalY(float y);
+    public abstract void setLocalDirection(double dir);
+    
+    public void setLocalPosition(Point p) {
+        setLocalX(p.x);
+        setLocalY(p.y);
+    }
     
     public void setParent(Anchor p, boolean retainPosition) {
         if(p != null) {
@@ -55,9 +61,12 @@ public abstract class Entity implements Anchor {
     public void clearParent(boolean retainPosition) {
         if(retainPosition) {
             float newX = getX(), newY = getY();
+            double newDir = getDirection();
             setLocalX(newX);
             setLocalY(newY);
+            setLocalDirection(newDir);
         }
         parent = new Empty();
     }
+
 }

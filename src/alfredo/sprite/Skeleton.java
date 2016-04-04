@@ -87,13 +87,18 @@ public class Skeleton extends Entity {
         position.y = y;
     }
     
+    @Override
+    public void setLocalDirection(double dir) {
+        direction = dir;
+    }
+    
     /**
      * Moves the Skeleton in its current direction by the specified amount.
      * @param amount The amount to move the Skeleton forward by.
      */
     public void move(float amount) {
-        float mX = (float)(Math.cos(Math.toRadians(direction)) * amount);
-        float mY = (float)(Math.sin(Math.toRadians(direction)) * amount);
+        float mX = (float)(Math.cos(Math.toRadians(direction + 90)) * amount);
+        float mY = (float)(Math.sin(Math.toRadians(direction + 90)) * amount);
         bounds.translate(mX, mY);
         position.x += mX;
         position.y += mY;

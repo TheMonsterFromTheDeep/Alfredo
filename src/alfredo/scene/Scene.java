@@ -27,4 +27,6 @@ public abstract class Scene {
 
     public abstract void draw(Canvas canvas);
     public abstract void loop();
+    //Called whenever draw is called and the caller wants paint-based logic to be updated.
+    public void iloop() { }
 }

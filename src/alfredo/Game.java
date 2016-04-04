@@ -48,6 +48,7 @@ public class Game extends Interval {
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
+            scene.iloop();
             scene.draw(canvas);
             canvas.render(g, bufX, bufY, bufWidth, bufHeight);
             repaint();
