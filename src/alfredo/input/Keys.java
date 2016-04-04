@@ -1,7 +1,9 @@
 package alfredo.input;
 
+import alfredo.Game;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 /**
  * The Keys class provides methods for capturing key events and interacting with them.
@@ -19,12 +21,18 @@ public class Keys {
             if(e.getKeyCode() < states.length) {
                 states[e.getKeyCode()] = true;
             }
+            for(KeyUpEvent u : keyUpEvents) {
+                u.keyUp(e.getKeyCode());
+            }
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
             if(e.getKeyCode() < states.length) {
                 states[e.getKeyCode()] = false;
+            }
+            for(KeyDownEvent u : keyDownEvents) {
+                u.keyDown(e.getKeyCode());
             }
         }
     }
@@ -34,9 +42,15 @@ public class Keys {
     
     private char lastChar;
     
+    private ArrayList<KeyUpEvent> keyUpEvents;
+    private ArrayList<KeyDownEvent> keyDownEvents;
+    
     private Keys() {
         states = new boolean[256];
         handler = new Handler();
+        
+        keyUpEvents = new ArrayList();
+        keyDownEvents = new ArrayList();
     }
     
     private static Keys keys;
@@ -59,5 +73,13 @@ public class Keys {
     
     public static char getLastChar() {
         return keys.lastChar;
+    }
+    
+    public static void watch(KeyUpEvent e) {
+        keys.keyUpEvents.add(e);
+    }
+    
+    public static void watch(KeyDownEvent e) {
+        keys.keyDownEvents.add(e);
     }
 }
