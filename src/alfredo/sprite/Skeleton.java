@@ -101,7 +101,7 @@ public class Skeleton extends Entity {
     
     public void pointTowards(Point p) {
         double oldDirection = direction;
-        direction = Math.toDegrees(Math.atan2(p.y - position.y, p.x - position.x));
+        direction = Math.toDegrees(Math.atan2(p.y - position.y, p.x - position.x)) - 90;
         bounds.rotate(oldDirection - direction, getX(), getY());
     }
     
