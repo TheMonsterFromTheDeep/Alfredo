@@ -14,7 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class Game extends Interval {
-    private static final int DEFAULT_DELAY = 60;
+    private static final int DEFAULT_DELAY = 33;
     
     private static final int DEFAULT_WIDTH = 600;
     private static final int DEFAULT_HEIGHT = 400;
