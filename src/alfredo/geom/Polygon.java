@@ -95,9 +95,13 @@ public class Polygon {
     public void rotate(double degrees, float ax, float ay) {
         //IMPORTANT: It is not necessary to update the Lines because they all contain a direct pointer to the points.
         for(Point point : points) {
-            double angle = Math.atan2(point.y - ay, point.x - ax);
-            point.x = (float)(ax + Math.cos(angle + Math.toRadians(degrees)));
-            point.y = (float)(ay + Math.sin(angle + Math.toRadians(degrees)));
+            float ydist = point.y - ay;
+            float xdist = point.x - ax;
+            double angle = Math.atan2(ydist, xdist);
+            double distance = Math.sqrt(xdist * xdist + ydist * ydist);
+            point.x = (float)(ax + (Math.cos(angle + Math.toRadians(degrees)) * distance));
+            point.y = (float)(ay + (Math.sin(angle + Math.toRadians(degrees)) * distance));
+            System.out.println("Rotated point: " + point.x + " " + point.y);
         }
         calculateBounds();
     }

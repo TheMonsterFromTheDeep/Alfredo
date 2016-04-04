@@ -37,10 +37,14 @@ public class Skeleton extends Entity {
         this.graphic = graphic;
         
         BufferedImage render = graphic.render();
-        origin = new Point(render.getWidth() / 2.0f, render.getHeight() / 2.0f);
+        
+        float halfWidth = render.getWidth() / 2.0f;
+        float halfHeight = render.getHeight() / 2.0f;
+        
+        origin = new Point(halfWidth, halfHeight);
         this.center = center;
         //By default, construct a square bounding box
-        base = new Polygon(new Point[] { new Point(0, 0), new Point(render.getWidth(), 0), new Point(render.getWidth(), render.getHeight()), new Point(0, render.getHeight())});
+        base = new Polygon(new Point[] { new Point(center.x - halfWidth, center.y - halfHeight), new Point(center.x + halfWidth, center.y - halfHeight), new Point(center.x + halfWidth, center.y + halfHeight), new Point(center.x - halfWidth, center.y - halfHeight)});
         bounds = base.copy();
         
         position = new Point(0, 0);
