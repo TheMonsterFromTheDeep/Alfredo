@@ -77,19 +77,21 @@ public class Skeleton extends Entity {
     
     @Override
     public void setLocalX(float x) {
-        bounds.translate(position.x - x, 0);
+        bounds.translate(x - position.x, 0);
         position.x = x;
     }
     
     @Override
     public void setLocalY(float y) {
-        bounds.translate(0, position.y - y);
+        bounds.translate(0, y - position.y);
         position.y = y;
     }
     
     @Override
     public void setLocalDirection(double dir) {
+        double oldDirection = direction;
         direction = dir;
+        bounds.rotate(oldDirection - direction, getX(), getY());
     }
     
     /**
