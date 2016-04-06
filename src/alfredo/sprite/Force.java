@@ -3,6 +3,7 @@ package alfredo.sprite;
 import alfredo.geom.Line;
 import alfredo.geom.Point;
 import alfredo.geom.Polygon;
+import alfredo.input.Keys;
 
 /**
  * A Force is a specialized object for sprite movement. It allows a Bounds object to move exactly to another Bounds object
@@ -63,7 +64,7 @@ public class Force {
             for(Line pLine : p.lines) {
                 if(vector.intersects(pLine, check)) { //The force is causing the parent Bounds to move into the new Bounds; take corrective action!
                     //Shorten the Force so that the interaction is pushed back; essentially, move *this* Line's point back
-                    //to the intersection point with the other Bounds, and move all others back by an equal amount                        
+                    //to the intersection point with the other Bounds, and move all others back by an equal amount    
                     float dx = check.x - vector.end.x;
                     float dy = check.y - vector.end.y;
                     for(Line l : vectors) { l.end.translate(dx, dy); } //Translate all lines for future interactions
