@@ -49,7 +49,7 @@ public class Canvas {
     }
     
     public void draw(Graphic g, float x, float y) {
-        graphics.drawImage(g.render(), (int)translateX(x), height - (int)translateY(y), null);
+        graphics.drawImage(g.render(), (int)translateX(x), (int)translateY(y), null);
     }
     
     /**
