@@ -1,5 +1,6 @@
 package alfredo.sprite;
 
+import alfredo.geom.Intersection;
 import alfredo.geom.Line;
 import alfredo.geom.Point;
 import alfredo.geom.Polygon;
@@ -18,7 +19,7 @@ public class Force {
         Point[] points = bounds.bounds.copyPoints();
         vectors = new Line[points.length];
         for(int i = 0; i < vectors.length; i++) {
-            vectors[i] = new Line(points[i], new Point(points[i].x + dx, points[i].y + dy));
+            vectors[i] = new Line(points[i], points[i].getTranslation(dx, dy));
         }
         center = bounds.getPosition().getTranslation(dx, dy);
         
@@ -54,24 +55,30 @@ public class Force {
      * 
      * It does not, however, interact in terms of other forces, including rotations and gravity.
      * @param b The Bounds to do an interaction with.
+     * @return Whether the Force was modified - essentially, whether the parent bounds *is* in fact now "touching" the other object.
      */
-    public void interact(Bounds b) {
+    public boolean interact(Bounds b) {
         Polygon p = b.bounds; //Handle for convenience (compiler plz optimize)
         
-        Point check = new Point(); //Passed to Line.intersects() because the intersection point is required for shifting the Force backwards
+        Intersection check = new Intersection(); //Passed to Line.intersects() because the intersection point is required for shifting the Force backwards
+        boolean modified = false;
         
         for(Line vector : vectors) { //Iterate through lines to check for intersections
             for(Line pLine : p.lines) {
                 if(vector.intersects(pLine, check)) { //The force is causing the parent Bounds to move into the new Bounds; take corrective action!
                     //Shorten the Force so that the interaction is pushed back; essentially, move *this* Line's point back
-                    //to the intersection point with the other Bounds, and move all others back by an equal amount    
-                    float dx = check.x - vector.end.x;
-                    float dy = check.y - vector.end.y;
-                    for(Line l : vectors) { l.end.translate(dx, dy); } //Translate all lines for future interactions
-                    center.translate(dx, dy); //translate the center
+                    //to the intersection point with the other Bounds, and move all others back by an equal amount
+                    if(check.type == Intersection.TYPE_POINT) { //Only modify if Intersection is point
+                        float dx = check.point.x - vector.end.x;
+                        float dy = check.point.y - vector.end.y;
+                        for(Line l : vectors) { l.end.translate(dx, dy); } //Translate all lines for future interactions
+                        center.translate(dx, dy); //translate the center
+                        modified = true;
+                    }
                 }
             }
         }
+        return modified;
     }
     
     /**

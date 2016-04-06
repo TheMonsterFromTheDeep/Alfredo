@@ -1,5 +1,7 @@
 package alfredo.geom;
 
+import alfredo.input.Keys;
+
 public class Line {
     public Point start;
     public Point end;
@@ -79,7 +81,7 @@ public class Line {
     }
        
     public boolean intersects(Line check) {
-        Point test = new Point(); //The point to test for
+        /*Point test = new Point(); //The point to test for
         if(vertical()) {
             if(check.vertical()) {
                 return check.bounds(start) || check.bounds(end);
@@ -97,7 +99,8 @@ public class Line {
             test.x = ((checkSlope * check.start.x) + check.start.y + (mySlope * start.x) - start.y) / (mySlope - checkSlope);
             test.y = getY(test.x);
         }
-        return bounds(test) && check.bounds(test);
+        return bounds(test) && check.bounds(test);*/
+        return intersects(check, null); //More elegant solution in future maybe?
         
         //int xdif1 = end.x - start.x;
         //int xdif2 = check.end.x - check.start.x;
@@ -141,11 +144,14 @@ public class Line {
      * @param out The Point to write the intersection to.
      * @return Whether the lines intersect.
      */
-    public boolean intersects(Line check, Point out) {
-        //TODO: Figure out how to not do this with copy-pasted code from non-writing method
+    public boolean intersects(Line check, Intersection out) {
+        //TODO: Figure out how to not do this with copy-pasted code from non-writing method (check?)
         Point test = new Point(); //The point to test for
         if(vertical()) {
             if(check.vertical()) {
+                if(out != null) {
+                    out.type = Intersection.TYPE_LINE;
+                }
                 return check.bounds(start) || check.bounds(end);
             }
             test.x = start.x;
@@ -158,11 +164,20 @@ public class Line {
         else {
             float mySlope = slope();
             float checkSlope = check.slope();
+            if(areEqual(mySlope, checkSlope)) {
+                if(out != null) {
+                    out.type = Intersection.TYPE_LINE;
+                }
+                return check.bounds(start) || check.bounds(end);
+            }
             test.x = ((checkSlope * check.start.x) + check.start.y + (mySlope * start.x) - start.y) / (mySlope - checkSlope);
             test.y = getY(test.x);
         }
         if (bounds(test) && check.bounds(test)) { //If the point *is* an intersection, output it as such and return true
-            out.copyFrom(test);
+            if(out != null) {
+                out.type = Intersection.TYPE_POINT;
+                out.point = test;
+            }
             return true;
         }
         return false; //Point is not intersection

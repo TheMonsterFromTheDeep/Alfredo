@@ -39,7 +39,7 @@ public class Skeleton extends Bounds {
         this.center = center;
         //By default, construct a square bounding box
         
-        bounds = new Polygon(new Point[] { new Point(center.x - halfWidth, center.y - halfHeight), new Point(center.x + halfWidth, center.y - halfHeight), new Point(center.x + halfWidth, center.y + halfHeight), new Point(center.x - halfWidth, center.y - halfHeight)}); 
+        bounds = new Polygon(new Point[] { new Point(center.x - halfWidth, center.y - halfHeight), new Point(center.x + halfWidth, center.y - halfHeight), new Point(center.x + halfWidth, center.y + halfHeight), new Point(center.x - halfWidth, center.y + halfHeight), new Point(center.x - halfWidth, center.y - halfHeight)}); 
     }
     
     public Skeleton(Graphic graphic) { this(graphic, new Point(0, 0)); }
