@@ -36,6 +36,16 @@ public class Line {
     }
     
     /**
+     * Translate the Line by the specified amount.
+     * @param dx The amount to translate the Line horizontally.
+     * @param dy The amount to translate the Line vertically.
+     */
+    public void translate(float dx, float dy) {
+        start.translate(dx, dy);
+        end.translate(dx, dy);
+    }
+    
+    /**
      * Gets the y coordinate of a point along this Line with the specified x coordinate.
      * 
      * Will return a value regardless of whether the point is within bounds.
@@ -67,7 +77,7 @@ public class Line {
         return ((greaterOrEqual(check.x, start.x) && lessOrEqual(check.x, end.x)) || (greaterOrEqual(check.x, end.x) && lessOrEqual(check.x, start.x))) &&
                ((greaterOrEqual(check.y, start.y) && lessOrEqual(check.y, end.y)) || (greaterOrEqual(check.y, end.y) && lessOrEqual(check.y, start.y)));
     }
-        
+       
     public boolean intersects(Line check) {
         Point test = new Point(); //The point to test for
         if(vertical()) {
@@ -119,5 +129,42 @@ public class Line {
             return ((checkx >= check.start.x && checkx <= check.end.x) || (checkx <= check.start.x && checkx >= check.end.x));
         }*/
         
+    }
+    
+    /**
+     * Checks for an intersection with another Line, and if it finds it, writes the
+     * intersection to the specified Point.
+     * 
+     * Can be used in the interest of good style; requires only looking for intersection
+     * point *once.*
+     * @param check The Line to check intersection with.
+     * @param out The Point to write the intersection to.
+     * @return Whether the lines intersect.
+     */
+    public boolean intersects(Line check, Point out) {
+        //TODO: Figure out how to not do this with copy-pasted code from non-writing method
+        Point test = new Point(); //The point to test for
+        if(vertical()) {
+            if(check.vertical()) {
+                return check.bounds(start) || check.bounds(end);
+            }
+            test.x = start.x;
+            test.y = check.getY(test.x);
+        }
+        else if(check.vertical()) {
+            test.x = check.start.x;
+            test.y = getY(test.x);
+        }
+        else {
+            float mySlope = slope();
+            float checkSlope = check.slope();
+            test.x = ((checkSlope * check.start.x) + check.start.y + (mySlope * start.x) - start.y) / (mySlope - checkSlope);
+            test.y = getY(test.x);
+        }
+        if (bounds(test) && check.bounds(test)) { //If the point *is* an intersection, output it as such and return true
+            out.copyFrom(test);
+            return true;
+        }
+        return false; //Point is not intersection
     }
 }

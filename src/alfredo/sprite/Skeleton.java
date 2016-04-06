@@ -12,18 +12,12 @@ import java.awt.image.BufferedImage;
  * a set of interchangeable Skeletons.
  * @author TheMonsterFromTheDeep
  */
-public class Skeleton extends Entity {
+public class Skeleton extends Bounds {
     public Graphic graphic; //The graphical appearance of the Skeleton
-    
-    private final Polygon base; //The original copy of the Skeleton's bounds
-    public Polygon bounds; //The modified (translated, rotated, etc) version of the Skeleton's bounds
     
     private final Point origin; //The center of the graphic; used as the base for the center point
     private Point center; //The center where the bounds and graphic are rotated / drawn with
     //When being drawn, the coordinates for the Skeleton are where the center point of the image is drawn
-    
-    private Point position;
-    private double direction;
     
     public static Skeleton loadFromPath(String path) {
         return new Skeleton(Resources.getImage(path));
@@ -44,97 +38,13 @@ public class Skeleton extends Entity {
         origin = new Point(halfWidth, halfHeight);
         this.center = center;
         //By default, construct a square bounding box
-        base = new Polygon(new Point[] { new Point(center.x - halfWidth, center.y - halfHeight), new Point(center.x + halfWidth, center.y - halfHeight), new Point(center.x + halfWidth, center.y + halfHeight), new Point(center.x - halfWidth, center.y - halfHeight)});
-        bounds = base.copy();
         
-        position = new Point(0, 0);
+        bounds = new Polygon(new Point[] { new Point(center.x - halfWidth, center.y - halfHeight), new Point(center.x + halfWidth, center.y - halfHeight), new Point(center.x + halfWidth, center.y + halfHeight), new Point(center.x - halfWidth, center.y - halfHeight)}); 
     }
     
     public Skeleton(Graphic graphic) { this(graphic, new Point(0, 0)); }
     
-    //Returns the position / direction of the Skeleton.
-    @Override
-    public float getLocalX() { return position.x; }
-    @Override
-    public float getLocalY() { return position.y; }
-    @Override
-    public double getLocalDirection() { return direction; }
-    
     //Returns the relative position of the anchor point of the Skeleton. This should be subtracted from the position when drawing.
     public float getCenterX() { return origin.x + center.x; }
     public float getCenterY() { return origin.y + center.y; }
-    
-    public void rotate(double degrees) {
-        direction += degrees;
-        bounds.rotate(degrees, getX(), getY());
-    }
-    
-    public void moveX(float amount) {
-        bounds.translate(amount, 0);
-        position.x += amount;
-    }
-    
-    public void moveY(float amount) {
-        bounds.translate(0, amount);
-        position.y += amount;
-    }
-    
-    @Override
-    public void setLocalX(float x) {
-        bounds.translate(x - position.x, 0);
-        position.x = x;
-    }
-    
-    @Override
-    public void setLocalY(float y) {
-        bounds.translate(0, y - position.y);
-        position.y = y;
-    }
-    
-    @Override
-    public void setLocalDirection(double dir) {
-        double oldDirection = direction;
-        direction = dir;
-        bounds.rotate(oldDirection - direction, getX(), getY());
-    }
-    
-    /**
-     * Moves the Skeleton in its current direction by the specified amount.
-     * @param amount The amount to move the Skeleton forward by.
-     */
-    public void move(float amount) {
-        float mX = (float)(Math.cos(Math.toRadians(direction + 90)) * amount);
-        float mY = (float)(Math.sin(Math.toRadians(direction + 90)) * amount);
-        bounds.translate(mX, mY);
-        position.x += mX;
-        position.y += mY;
-    }
-    
-    public void pointTowards(Point p) {
-        double oldDirection = direction;
-        direction = Math.toDegrees(Math.atan2(p.y - position.y, p.x - position.x)) - 90;
-        bounds.rotate(oldDirection - direction, getX(), getY());
-    }
-    
-    public void copyTransformOf(Skeleton target) {
-        bounds.copyFrom(base); //Reset position, direction
-        
-        this.direction = target.direction; //Copy target direction, position
-        this.position = target.position;
-        
-        bounds.rotate(direction, getX(), getY());
-        bounds.translate(position.x, position.y); //Move to correct position
-    }
-    
-    /**
-     * Determines whether this Skeleton is touching the specified Skeleton in any way - either
-     * they are intersecting or one contains the other.
-     * 
-     * This uses the bounds of the Skeletons to check for intersections.
-     * @param s The Skeleton to check with.
-     * @return Whether the Skeletons are touching.
-     */
-    public boolean touches(Skeleton s) {
-        return bounds.intersects(s.bounds) || bounds.contains(s.bounds) || s.bounds.contains(bounds);
-    }
 }

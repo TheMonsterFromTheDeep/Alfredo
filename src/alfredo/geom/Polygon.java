@@ -1,8 +1,8 @@
 package alfredo.geom;
 
 public class Polygon {
-    Point[] points;
-    Line[] lines;
+    public Point[] points;
+    public Line[] lines;
     
     Rectangle bounds;
     
@@ -151,5 +151,11 @@ public class Polygon {
             bounds.width = p.bounds.width;
             bounds.height = p.bounds.height;
         }
+    }
+    
+    public Point[] copyPoints() {
+        Point[] copy = new Point[points.length];
+        System.arraycopy(points, 0, copy, 0, points.length);
+        return copy;
     }
 }
