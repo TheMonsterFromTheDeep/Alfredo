@@ -118,6 +118,13 @@ public class Game extends Interval {
     private Dimension nonFullscreenSize;
     private java.awt.Point nonFullscreenPos;
     
+    /**
+     * A public handle to the Game object so that it can be properly manipulated.
+     * 
+     * This object is only instantiated once run() is called.
+     */
+    public static Game game;
+    
     public Game(String title, int width, int height, double scalex, double scaley) {
         super(DEFAULT_DELAY);
         
@@ -162,6 +169,7 @@ public class Game extends Interval {
     public void setup() { }
     
     public void run() {
+        if(game == null) { game = this; }
         setup();
         frame.setVisible(true);
         this.start();
