@@ -1,6 +1,7 @@
 package alfredo.sprite;
 
 import alfredo.paint.Canvas;
+import alfredo.paint.Image;
 import java.awt.Color;
 
 public class SpriteBatch {
@@ -20,11 +21,12 @@ public class SpriteBatch {
         canvas.fill(background);
     }
     
-    public void draw(Skeleton s) {
-        canvas.draw(s.image, s.getWorldX() - s.getCenterX(), s.getWorldY() - s.getCenterY(), s.getWorldDirection(), s.getCenterX(), s.getCenterY());
+    
+    public void draw(Image i, Drawable d) {
+        canvas.draw(i, d.getDrawX(), d.getDrawY(), d.getDrawDirection(), d.getDrawPivotX(), d.getDrawPivotY());
     }
     
-    public void draw(Sprite s) {
-        s.draw(this);
+     public void draw(Sprite s) {
+        draw(s.image, s); //Draw the Sprite's image onto the Sprite
     }
 }

@@ -23,7 +23,7 @@ public class Force {
         for(int i = 0; i < vectors.length; i++) {
             vectors[i] = new Line(points[i], points[i].getTranslation(dx, dy));
         }
-        center = bounds.getPosition().getTranslation(dx, dy);
+        center = bounds.getLocation().getTranslation(dx, dy);
         
         handle = bounds; //The handle that this Force can be applied to.
         
@@ -65,8 +65,8 @@ public class Force {
     public boolean interact(Bounds b) {
         Polygon p = b.bounds; //Handle for convenience (compiler plz optimize)
         
-        float checkdx = b.getLocalX() - handle.getLocalX(); //TODO: Fix all local/global position problems!
-        float checkdy = b.getLocalY() - handle.getLocalY();
+        float checkdx = b.getX() - handle.getX(); //TODO: Fix all local/global position problems!
+        float checkdy = b.getY() - handle.getY();
         
         //If the bounds interacting is in the opposite direction, don't interact
         if(((checkdx > 0) != (x > 0)) && ((checkdy > 0) != (y > 0))) { return false; }
@@ -99,7 +99,7 @@ public class Force {
      * Applies the force to the Bounds object, causing it to take the new Position determined by the Force.
      */
     public void apply() {
-        handle.setLocalPosition(center);
+        handle.setLocation(center);
     }
     
     /**
@@ -115,7 +115,7 @@ public class Force {
             vectors[i].start.copyFrom(handle.bounds.points[i]);
             handle.bounds.points[i].getTranslation(dx, dy, vectors[i].end);
         }
-        handle.getPosition().getTranslation(dx, dy, center);
+        handle.getLocation().getTranslation(dx, dy, center);
         
         x = dx;
         y = dy;

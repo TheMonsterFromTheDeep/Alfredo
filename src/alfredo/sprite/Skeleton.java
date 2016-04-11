@@ -7,19 +7,13 @@ import alfredo.util.Resources;
 import java.awt.image.BufferedImage;
 
 /**
- * A Skeleton makes up the skeleton of a Sprite. It handles everything including
- * position, graphics, and intersections. The Sprite is merely a wrapper for
- * a set of interchangeable Skeletons.
- * 
- * The Skeleton is deprecated and will soon be replaced or changed.
+ * A Skeleton associates a Bounds object with a Drawable and holds them consistent. Itself, a Skeleton has
+ * no graphical data - it simply contains the logical data that interacts virtually, while extra graphical
+ * data has to be provided to a drawing method in order for a Skeleton to have any graphical meaning.
  * @author TheMonsterFromTheDeep
  */
-public class Skeleton extends Bounds {
-    public Image image; //The graphical appearance of the Skeleton
-    
-    private final Point origin; //The center of the graphic; used as the base for the center point
-    private Point center; //The center where the bounds and graphic are rotated / drawn with
-    //When being drawn, the coordinates for the Skeleton are where the center point of the image is drawn
+public class Skeleton extends Bounds implements Drawable {    
+    float offsetx, offsety; //The offset for where the image is drawn
     
     public static Skeleton loadFromPath(String path) {
         Image image = new Image();
@@ -33,22 +27,52 @@ public class Skeleton extends Bounds {
         return new Skeleton(image, center);
     }
     
-    public Skeleton(Image image, Point center) {
-        this.image = image;
-        
+    public Skeleton(Image image, Point center) {        
         float halfWidth = image.image.getWidth() / 2.0f;
         float halfHeight = image.image.getHeight() / 2.0f;
         
-        origin = new Point(halfWidth, halfHeight);
-        this.center = center;
-        //By default, construct a square bounding box
+        offsetx = center.x - halfWidth;
+        offsety = center.y - halfHeight;
         
-        bounds = new Polygon(new Point[] { new Point(center.x - halfWidth, center.y - halfHeight), new Point(center.x + halfWidth, center.y - halfHeight), new Point(center.x + halfWidth, center.y + halfHeight), new Point(center.x - halfWidth, center.y + halfHeight), new Point(center.x - halfWidth, center.y - halfHeight)}); 
+        //By default, construct a square bounding box
+        //The box is constructed such that the center point is empirically equal to 0,0.
+        //Essentially, the bounding box is created so that 0,0 is offset from the middle of
+        //the box to the point called "center".
+        
+        //Does that make sense?
+        //Here's a picture:
+        // |-----|
+        // |     |
+        // |     |
+        // |  b  |
+        // |     |
+        // |    o|
+        // |-----|
+        // b is the middle of the bounding box, while o is 0,0 in coordinate space. In this case, the "center" point
+        // was supposed to be (2,2), so o is offset from b by 2 in both directions.
+        bounds = new Polygon(new Point[] { new Point(-halfWidth - center.x, -halfHeight - center.y), new Point(halfWidth - center.x, -halfHeight - center.y), new Point(halfWidth - center.x, halfHeight - center.y), new Point(-halfWidth - center.x, halfHeight - center.y), new Point(-halfWidth - center.x, -halfHeight - center.y)});
     }
     
     public Skeleton(Image image) { this(image, new Point(0, 0)); }
-    
-    //Returns the relative position of the anchor point of the Skeleton. This should be subtracted from the position when drawing.
-    public float getCenterX() { return origin.x + center.x; }
-    public float getCenterY() { return origin.y + center.y; }
+
+    @Override
+    public float getDrawX() {
+        return getWorldX() + offsetx;
+    }
+    @Override
+    public float getDrawY() {
+        return getWorldY() + offsety;
+    }
+
+    @Override
+    public float getDrawPivotX() {
+        return getWorldX() - offsetx;
+    }
+    @Override
+    public float getDrawPivotY() {
+        return getWorldY() - offsety;
+    }
+
+    @Override
+    public double getDrawDirection() { return getWorldDirection(); }
 }
