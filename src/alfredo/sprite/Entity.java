@@ -3,70 +3,63 @@ package alfredo.sprite;
 import alfredo.geom.Point;
 
 /**
- * An Entity represents an object that has a position and a direction.
+ * An Entity is some sort of object that has a position and direction in a local space.
  * 
- * Entities are useful in that they can be parented to one another.
+ * Subclasses can override its various transform set methods in order to do more - for example,
+ * a Bounds object will override them so that the bounding box will move with the Entity.
  * @author TheMonsterFromTheDeep
  */
-public abstract class Entity implements Anchor {
-    private Anchor parent;
+public class Entity extends Transform {
+    private Worldly parent;
     
     public Entity() {
-        parent = new Empty();
-    }
-    
-    public final Point getPosition() {
-        return new Point(getX(), getY());
+        parent = World.world;
     }
     
     @Override
-    public final double getDirection() {
-        return parent.getDirection() + getLocalDirection();
+    public final float getWorldX() {
+        return (float)(parent.getWorldX() + Math.cos(Math.toRadians(parent.getWorldDirection() + 90)) * location.y + Math.cos(Math.toRadians(parent.getWorldDirection())) * location.x);
     }
     
     @Override
-    public final float getX() {
-        return (float)(parent.getX() + Math.cos(Math.toRadians(parent.getDirection() + 90)) * getLocalY() + Math.cos(Math.toRadians(parent.getDirection())) * getLocalX());
+    public final float getWorldY() {
+        return (float)(parent.getWorldY() + Math.sin(Math.toRadians(parent.getWorldDirection() + 90)) * location.y + Math.sin(Math.toRadians(parent.getWorldDirection())) * location.x);
     }
     
     @Override
-    public final float getY() {
-        return (float)(parent.getY() + Math.sin(Math.toRadians(parent.getDirection() + 90)) * getLocalY() + Math.sin(Math.toRadians(parent.getDirection())) * getLocalX());
+    public final double getWorldDirection() {
+        return parent.getWorldDirection() + direction;
     }
     
-    public abstract float getLocalX();
-    public abstract float getLocalY();
-    public abstract double getLocalDirection();
-    public abstract void setLocalX(float x);
-    public abstract void setLocalY(float y);
-    public abstract void setLocalDirection(double dir);
-    
-    public void setLocalPosition(Point p) {
-        setLocalX(p.x);
-        setLocalY(p.y);
-    }
-    
-    public void setParent(Anchor p, boolean retainPosition) {
+    public final void setParent(Worldly p, boolean retainPosition) {
         if(p != null) {
             if(retainPosition) {
-                float newX = getX() - p.getX();
-                float newY = getY() - p.getY();
-                setLocalX(newX);
-                setLocalY(newY);
+                //If direction is zero, inverse trig breaks; just use normal position though because direction is world direction too
+                if(Math.abs(p.getWorldDirection()) < 0.0001) {
+                    location.x = getWorldX() - p.getWorldX();
+                    location.y = getWorldY() - p.getWorldY();
+                }
+                else {
+                    //Literal algebraic inverse of the getWorldX(), getWorldY() functions - only difference is that x
+                    //has to be temporarily stored because it is being set but is needed for the inverse of
+                    //getWorldY()
+                    float tempx = location.x;
+                    double pdir = p.getWorldDirection(); //Makes this so much nicer
+                    location.x = (float)((getWorldX() - p.getWorldX() - Math.cos(Math.toRadians(pdir + 90)) * location.y) / Math.cos(Math.toRadians(pdir)));
+                    location.y = (float)((getWorldY() - p.getWorldY() - Math.sin(Math.toRadians(pdir)) * tempx) / Math.sin(pdir + 90));
+                }
+                direction = getWorldDirection() - p.getWorldDirection();
             }
             parent = p;
         }
     }
     
-    public void clearParent(boolean retainPosition) {
+    public final void clearParent(boolean retainPosition) {
         if(retainPosition) {
-            float newX = getX(), newY = getY();
-            double newDir = getDirection();
-            setLocalX(newX);
-            setLocalY(newY);
-            setLocalDirection(newDir);
+            location.x = getWorldX();
+            location.y = getWorldY();
+            direction = getWorldDirection();
         }
-        parent = new Empty();
+        parent = World.world;
     }
-
 }

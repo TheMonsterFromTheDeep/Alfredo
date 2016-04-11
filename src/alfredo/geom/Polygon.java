@@ -101,7 +101,6 @@ public class Polygon {
             double distance = Math.sqrt(xdist * xdist + ydist * ydist);
             point.x = (float)(ax + (Math.cos(angle + Math.toRadians(degrees)) * distance));
             point.y = (float)(ay + (Math.sin(angle + Math.toRadians(degrees)) * distance));
-            System.out.println("Rotated point: " + point.x + " " + point.y);
         }
         calculateBounds();
     }

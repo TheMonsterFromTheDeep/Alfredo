@@ -4,6 +4,7 @@ import alfredo.input.Keys;
 import alfredo.input.Mouse;
 import alfredo.paint.Canvas;
 import alfredo.scene.Scene;
+import alfredo.sprite.World;
 import alfredo.timing.Interval;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -142,6 +143,7 @@ public class Game extends Interval {
         frame.getLocation(nonFullscreenPos);
         
         scene = Scene.getEmptyScene();
+        World.init();
         
         tick = 0;
     }
