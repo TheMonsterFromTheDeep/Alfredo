@@ -8,7 +8,7 @@ import alfredo.geom.Polygon;
  * @author TheMonsterFromTheDeep
  */
 public class Bounds extends Entity {
-    private Polygon base;
+    private volatile Polygon base;
     public Polygon bounds; //The modified (translated, rotated, etc) version of the bounds data
     
     protected final void init(Polygon p) {
@@ -37,21 +37,21 @@ public class Bounds extends Entity {
     
     @Override
     public void setX(float x) {
-        bounds.translate(x - location.x, 0);
+        //bounds.translate(x - location.x, 0);
         location.x = x;
     }
     
     @Override
     public void setY(float y) {
-        bounds.translate(0, y - location.y);
+        //bounds.translate(0, y - location.y);
         location.y = y;
     }
     
     @Override
     public void setDirection(double dir) {
-        double oldDirection = direction;
+        //double oldDirection = direction;
         direction = dir;
-        bounds.rotate(oldDirection - direction, getWorldX(), getWorldY());
+        //bounds.rotate(oldDirection - direction, getWorldX(), getWorldY());
     }
     
     /**
@@ -70,6 +70,24 @@ public class Bounds extends Entity {
     }
     
     /**
+     * Applies the global transformation of the Bounds object to its actual Polygon data.
+     * 
+     * This is called whenever the Bounds does an intersection check so that the Bounds has
+     * the proper and correct data for everything that it is doing.
+     */
+    public void apply() {
+        bounds.copyFrom(base);
+        
+        float x = getWorldX();
+        float y = getWorldY();
+        
+        bounds.rotate(getWorldDirection(), 0, 0);
+        bounds.translate(x, y); //Translate the bounds object to have global position (this should work... right?)
+        //
+        
+    }
+    
+    /**
      * Determines whether this Bounds is touching the specified Bounds in any way - either
      * they are intersecting or one contains the other.
      * 
@@ -77,7 +95,8 @@ public class Bounds extends Entity {
      * @param b The Bounds to check with.
      * @return Whether the Bounds are touching.
      */
-    public boolean touches(Bounds b) {
+    public final boolean touches(Bounds b) {
+        apply(); //Make sure bounds position/rotation is good
         return bounds.intersects(b.bounds) || bounds.contains(b.bounds) || b.bounds.contains(bounds);
     }
 }
