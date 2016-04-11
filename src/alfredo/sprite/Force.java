@@ -15,6 +15,8 @@ public class Force {
     Point center; //The "new" center of the Force; e.g. the location that becomes a Bounds' location when apply() is called
     Bounds handle;
     
+    float x, y; //The amount of x, y force that the Force is applying
+    
     public Force(Bounds bounds, float dx, float dy) {
         Point[] points = bounds.bounds.copyPoints();
         vectors = new Line[points.length];
@@ -24,6 +26,9 @@ public class Force {
         center = bounds.getPosition().getTranslation(dx, dy);
         
         handle = bounds; //The handle that this Force can be applied to.
+        
+        x = dx;
+        y = dy;
     }
     
     /**
@@ -60,6 +65,13 @@ public class Force {
     public boolean interact(Bounds b) {
         Polygon p = b.bounds; //Handle for convenience (compiler plz optimize)
         
+        float checkdx = b.getLocalX() - handle.getLocalX(); //TODO: Fix all local/global position problems!
+        float checkdy = b.getLocalY() - handle.getLocalY();
+        
+        //If the bounds interacting is in the opposite direction, don't interact
+        if(((checkdx > 0) != (x > 0)) && ((checkdy > 0) != (y > 0))) { return false; }
+        //Should this be done with trig maybe?
+        
         Intersection check = new Intersection(); //Passed to Line.intersects() because the intersection point is required for shifting the Force backwards
         boolean modified = false;
         
@@ -73,6 +85,8 @@ public class Force {
                         float dy = check.point.y - vector.end.y;
                         for(Line l : vectors) { l.end.translate(dx, dy); } //Translate all lines for future interactions
                         center.translate(dx, dy); //translate the center
+                        x += dx;
+                        y += dy;
                         modified = true;
                     }
                 }
@@ -102,5 +116,8 @@ public class Force {
             handle.bounds.points[i].getTranslation(dx, dy, vectors[i].end);
         }
         handle.getPosition().getTranslation(dx, dy, center);
+        
+        x = dx;
+        y = dy;
     }
 }
