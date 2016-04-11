@@ -21,7 +21,7 @@ public class SpriteBatch {
     }
     
     public void draw(Skeleton s) {
-        canvas.draw(s.graphic, s.getX() - s.getCenterX(), s.getY() - s.getCenterY(), s.getDirection(), s.getCenterX(), s.getCenterY());
+        canvas.draw(s.image, s.getX() - s.getCenterX(), s.getY() - s.getCenterY(), s.getDirection(), s.getCenterX(), s.getCenterY());
     }
     
     public void draw(Sprite s) {

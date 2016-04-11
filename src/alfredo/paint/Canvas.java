@@ -2,7 +2,6 @@ package alfredo.paint;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
@@ -48,8 +47,8 @@ public class Canvas {
         graphics.fillRect(0, 0, width, height);
     }
     
-    public void draw(Graphic g, float x, float y) {
-        graphics.drawImage(g.render(), (int)translateX(x), (int)translateY(y), null);
+    public void draw(Image i, float x, float y) {
+        graphics.drawImage(i.image, (int)translateX(x), (int)translateY(y), null);
     }
     
     /**
@@ -61,14 +60,12 @@ public class Canvas {
      * @param y
      * @param angle Rotation in degrees.
      */
-    public void draw(Graphic g, float x, float y, double angle) {
-        BufferedImage orig = g.render();
-        
-        draw(g, x, y, angle, orig.getWidth() / 2f, orig.getHeight() / 2f);
+    public void draw(Image i, float x, float y, double angle) {
+        draw(i, x, y, angle, i.image.getWidth() / 2f, i.image.getHeight() / 2f);
     }
     
-    public void draw(Graphic g, float x, float y, double angle, float pivotx, float pivoty) {
-        BufferedImage orig = g.render();
+    public void draw(Image i, float x, float y, double angle, float pivotx, float pivoty) {
+        BufferedImage orig = i.image;
         
         int w = orig.getWidth();
         int h = orig.getHeight();
