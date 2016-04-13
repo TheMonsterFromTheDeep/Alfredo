@@ -79,8 +79,19 @@ public class Force {
         boolean modified = false;
         
         for(Line vector : vectors) { //Iterate through lines to check for intersections
-            for(Line pLine : p.lines) {
-                if(vector.intersects(pLine, check)) { //The force is causing the parent Bounds to move into the new Bounds; take corrective action!
+            for(int i = 0; i < p.lines.length; i++) {
+                if(vector.intersects(p.lines[i], check)) { //The force is causing the parent Bounds to move into the new Bounds; take corrective action!
+                    if(vector.parallel(p.lines[i])) {
+                        continue;
+                    }
+                    int oLine = (i > 0) ? i - 1 : p.lines.length - 1;
+                    if(vector.intersects(p.lines[oLine]) && vector.parallel(p.lines[oLine])) {
+                        continue;
+                    }
+                    oLine = (i < p.lines.length - 1) ? i + 1 : 0;
+                    if(vector.intersects(p.lines[oLine]) && vector.parallel(p.lines[oLine])) {
+                        continue;
+                    }
                     //Shorten the Force so that the interaction is pushed back; essentially, move *this* Line's point back
                     //to the intersection point with the other Bounds, and move all others back by an equal amount
                     if(check.type == Intersection.TYPE_POINT) { //Only modify if Intersection is point

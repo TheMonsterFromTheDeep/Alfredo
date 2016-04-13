@@ -2,6 +2,7 @@ package alfredo;
 
 import alfredo.input.Keys;
 import alfredo.input.Mouse;
+import alfredo.paint.Camera;
 import alfredo.paint.Canvas;
 import alfredo.scene.Scene;
 import alfredo.sprite.World;
@@ -36,13 +37,15 @@ public class Game extends Interval {
             
             this.setBackground(new java.awt.Color(0x0));
             
-            Mouse.Handler adapter = Mouse.init();
+            canvas = new Canvas(width, height);
+            
+            World.init();
+            
+            Mouse.Handler adapter = Mouse.init(canvas.getCamera());
             mouse = Mouse.getMouse(adapter);
             addMouseListener(adapter);
             addMouseWheelListener(adapter);
             addMouseMotionListener(adapter);
-            
-            canvas = new Canvas(width, height);
         }
         
         @Override
@@ -129,6 +132,8 @@ public class Game extends Interval {
     public Game(String title, int width, int height, double scalex, double scaley) {
         super(DEFAULT_DELAY);
         
+        
+        
         frame = new GameFrame(title);
         panel = new GamePanel(width, height);
         panel.setPreferredSize(new Dimension((int)(width * scalex), (int)(height * scaley)));
@@ -143,7 +148,7 @@ public class Game extends Interval {
         frame.getLocation(nonFullscreenPos);
         
         scene = Scene.getEmptyScene();
-        World.init();
+        
         
         tick = 0;
     }
@@ -170,7 +175,11 @@ public class Game extends Interval {
     
     public void setup() { }
     
-    public void run() {
+    public final void init() {
+        game = this;
+    }
+    
+    public final void run() {
         if(game == null) { game = this; }
         setup();
         frame.setVisible(true);
@@ -211,4 +220,15 @@ public class Game extends Interval {
     }
     
     public boolean isFullscreen() { return fullscreen; }
+    
+    public static Canvas getCanvas() {
+        return game.panel.canvas;
+    }
+    
+    //TODO: Robustify camera system
+    public static void setCamera(Camera c) {
+        game.panel.canvas.setCamera(c);
+    }
+    
+    
 }

@@ -37,6 +37,13 @@ public class Line {
         return (-start.x * slope()) + start.y;
     }
     
+    public boolean parallel(Line l) {
+        if(l.vertical() || this.vertical()) {
+            return (l.vertical() && this.vertical());
+        }
+        return areEqual(this.slope(), l.slope());
+    }
+    
     /**
      * Translate the Line by the specified amount.
      * @param dx The amount to translate the Line horizontally.

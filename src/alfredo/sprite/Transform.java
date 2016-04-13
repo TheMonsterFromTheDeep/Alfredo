@@ -13,6 +13,11 @@ public class Transform implements Worldly {
     protected Point location; //Protected so that they aren't rashly modified (needed for some entities)
     protected double direction;
 
+    public Transform() {
+        location = new Point();
+        direction = 0;
+    }
+    
     @Override
     public float getWorldX() {
         return location.x;

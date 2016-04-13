@@ -21,12 +21,14 @@ public class Canvas {
     private final float offsetx;
     private final float offsety;
     
+    Camera camera;
+    
     private float translateX(float x) {
-        return x + offsetx;
+        return camera.xToScreen(x) + offsetx;
     }
     
     private float translateY(float y) {
-        return y + offsety;
+        return camera.yToScreen(y) + offsety;
     }
     
     public Canvas(int width, int height) {
@@ -38,6 +40,8 @@ public class Canvas {
         
         this.offsetx = width / 2f;
         this.offsety = height / 2f;
+        
+        camera = new StaticCamera(width, height);
     }
     
     public void render(Graphics g, int x, int y, int width, int height) {
@@ -114,4 +118,12 @@ public class Canvas {
             graphics.drawLine((int)translateX(l.start.x), (int)translateY(l.start.y), (int)translateX(l.end.x), (int)translateY(l.end.y));
         }
     }
+    
+    public void setCamera(Camera c) {
+        if(c.width == width && c.height == height) {
+            camera = c;
+        }
+    }
+    
+    public Camera getCamera() { return camera; }
 }

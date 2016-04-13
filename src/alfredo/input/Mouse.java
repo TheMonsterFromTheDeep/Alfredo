@@ -1,6 +1,8 @@
 package alfredo.input;
 
 import alfredo.geom.Point;
+import alfredo.paint.Camera;
+import alfredo.sprite.Entity;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
@@ -50,12 +52,16 @@ public class Mouse {
         public void mouseDragged(MouseEvent e) {
             mousex = (int)((e.getX() - screenX) / screenScale);
             mousey = (int)((e.getY() - screenY) / screenScale);
+            cursor.setX(camera.xToWorld(mousex));
+            cursor.setY(camera.yToWorld(mousey));
         }
 
         @Override
         public void mouseMoved(MouseEvent e) {
             mousex = (int)((e.getX() - screenX) / screenScale);
             mousey = (int)((e.getY() - screenY) / screenScale);
+            cursor.setX(camera.xToWorld(mousex));
+            cursor.setY(camera.yToWorld(mousey));
         }
     }
     
@@ -75,7 +81,11 @@ public class Mouse {
     
     private static Mouse mouse;
     
-    private Mouse() {
+    private Camera camera;
+    
+    public final Entity cursor;
+    
+    private Mouse(Camera c) {
         lmbDown = false;
         mmbDown = false;
         rmbDown = false;
@@ -84,11 +94,14 @@ public class Mouse {
         
         scrollTilt = 0;
         handler = new Handler();
+        
+        camera = c;
+        cursor = new Entity();
     }
     
-    public static Handler init() {
+    public static Handler init(Camera c) {
         if(mouse == null) {
-            mouse = new Mouse();
+            mouse = new Mouse(c);
             return mouse.handler;
         }
         return null;
@@ -115,6 +128,10 @@ public class Mouse {
         this.screenScale = scale;
     }
     
+    public static void setCamera(Camera c) {
+        mouse.camera = c;
+    }
+    
     public static boolean isLMBDown() { return mouse.lmbDown; }
     public static boolean isMMBDown() { return mouse.mmbDown; }
     public static boolean isRMBDown() { return mouse.rmbDown; }
@@ -126,4 +143,6 @@ public class Mouse {
     
     public static double getScrollTilt() { return mouse.scrollTilt; }
     public static void resetScrollTilt() { mouse.scrollTilt = 0; }
+    
+    public static Entity getCursor() { return mouse.cursor; }
 }
