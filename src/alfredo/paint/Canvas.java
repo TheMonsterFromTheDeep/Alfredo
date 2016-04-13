@@ -1,5 +1,7 @@
 package alfredo.paint;
 
+import alfredo.geom.Line;
+import alfredo.geom.Polygon;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -104,5 +106,12 @@ public class Canvas {
         op.filter(orig, filter);
         
         graphics.drawImage(filter, (int)translateX(x + min.x), (int)translateY(y + min.y), null);
+    }
+    
+    public void ink(Polygon p, Color c) {
+        graphics.setColor(c);
+        for(Line l : p.lines) {
+            graphics.drawLine((int)translateX(l.start.x), (int)translateY(l.start.y), (int)translateX(l.end.x), (int)translateY(l.end.y));
+        }
     }
 }

@@ -8,19 +8,34 @@ import alfredo.geom.Polygon;
  * @author TheMonsterFromTheDeep
  */
 public class Bounds extends Entity {
+    /**
+     * The default object used to initialize the Bounds object. This allows it to sync even
+     * if a new shape is never specified.
+     */
+    public static final Polygon DEFAULT_BOUNDS = new Polygon(new Point[] { new Point(0, 0) }); 
+    
     private volatile Polygon base;
     public Polygon bounds; //The modified (translated, rotated, etc) version of the bounds data
     
-    protected final void init(Polygon p) {
+    private Point lastSyncPoint;
+    private double lastSyncDir;
+    
+    protected final void setShape(Polygon p) {
         base = p;
         bounds = base.copy();
+        sync(true);
     }
     
-    protected Bounds() { location = new Point(0, 0); }
+    protected Bounds() {
+        location = new Point(0, 0);
+        lastSyncPoint = new Point(0, 0);
+        lastSyncDir = 0;
+        setShape(DEFAULT_BOUNDS); //NOTE: If sync() is no longer called in setShape, please add it to this constructor
+    }
     
     public Bounds(Polygon p) {
         this();
-        init(p);
+        setShape(p);
     }
     
     /**
@@ -32,7 +47,7 @@ public class Bounds extends Entity {
         this();
         base = p;
         base.translate(-center.x, -center.y);
-        init(base);
+        setShape(base);
     }
     
     @Override
@@ -74,17 +89,38 @@ public class Bounds extends Entity {
      * 
      * This is called whenever the Bounds does an intersection check so that the Bounds has
      * the proper and correct data for everything that it is doing.
+     * 
+     * This method is optimized by checking whether this object has already been synced. However,
+     * due to the nature of how this works, the object will still think it has been synced if something
+     * like the shape changes. By setting the ignorePrevious flag to true, the method will not perform
+     * this optimization and will sync no matter what.
+     * @param ignorePrevious Whether the Bounds object should skip checking whether it is already synchronized.
      */
-    public void apply() {
-        bounds.copyFrom(base);
-        
+    public final void sync(boolean ignorePrevious) {
         float x = getWorldX();
         float y = getWorldY();
         
-        bounds.rotate(getWorldDirection(), 0, 0);
-        bounds.translate(x, y); //Translate the bounds object to have global position (this should work... right?)
-        //
-        
+        //TODO: Implement global comparison methods
+        //Only sync if the Bounds has moved significantly from where it was previously synced
+        if(!ignorePrevious || Math.abs(lastSyncPoint.x - x) < 0.0001 && Math.abs(lastSyncPoint.y - y) < 0.0001 && Math.abs(lastSyncDir - getWorldDirection()) < 0.0001) {
+            bounds.copyFrom(base);
+
+            bounds.rotate(getWorldDirection(), 0, 0);
+            bounds.translate(x, y); //Translate the bounds object to have global position (this should work... right?)
+            
+            lastSyncPoint.copyFrom(x, y);
+            lastSyncDir = getWorldDirection();
+        }
+    }
+    
+    /**
+     * Applies the global transformation of the Bounds object to its actual Polygon data.
+     * 
+     * This is called whenever the Bounds does an intersection check so that the Bounds has
+     * the proper and correct data for everything that it is doing.
+     */
+    public final void sync() {
+        sync(false);
     }
     
     /**
@@ -96,7 +132,8 @@ public class Bounds extends Entity {
      * @return Whether the Bounds are touching.
      */
     public final boolean touches(Bounds b) {
-        apply(); //Make sure bounds position/rotation is good
+        sync(); //Make sure bounds position/rotation is good
+        b.sync(); //Make sure *other* bounds object is synced
         return bounds.intersects(b.bounds) || bounds.contains(b.bounds) || b.bounds.contains(bounds);
     }
 }

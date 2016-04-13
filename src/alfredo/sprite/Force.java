@@ -18,7 +18,7 @@ public class Force {
     float x, y; //The amount of x, y force that the Force is applying
     
     public Force(Bounds bounds, float dx, float dy) {
-        bounds.apply(); //Bounds *needs* right state for this
+        bounds.sync(); //Bounds *needs* right state for this
         
         Point[] points = bounds.bounds.copyPoints();
         vectors = new Line[points.length];
@@ -72,7 +72,7 @@ public class Force {
         if(((checkdx > 0) != (x > 0)) && ((checkdy > 0) != (y > 0))) { return false; }
         //Should this be done with trig maybe?
         
-        b.apply(); //Make sure bounds has position/rotation that it needs
+        b.sync(); //Make sure bounds has position/rotation that it needs
         Polygon p = b.bounds; //Handle for convenience (compiler plz optimize)
         
         Intersection check = new Intersection(); //Passed to Line.intersects() because the intersection point is required for shifting the Force backwards
@@ -114,7 +114,7 @@ public class Force {
      * @param dy The new y translation.
      */
     public void reforce(float dx, float dy) {
-        handle.apply(); //Bounds *needs* right box position for this
+        handle.sync(); //Bounds *needs* right box position for this
         for(int i = 0; i < vectors.length; i++) {
             vectors[i].start.copyFrom(handle.bounds.points[i]);
             handle.bounds.points[i].getTranslation(dx, dy, vectors[i].end);

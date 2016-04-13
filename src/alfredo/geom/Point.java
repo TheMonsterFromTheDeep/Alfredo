@@ -54,4 +54,14 @@ public class Point {
         this.x = p.x;
         this.y = p.y;
     }
+    
+    /**
+     * Copy the specified location into this Point.
+     * @param x The x coordinate to copy.
+     * @param y The y coordinate to copy.
+     */
+    public void copyFrom(float x, float y) {
+        this.x = x;
+        this.y = y;
+    }
 }

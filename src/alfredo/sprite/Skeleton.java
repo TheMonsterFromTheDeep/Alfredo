@@ -50,7 +50,7 @@ public class Skeleton extends Bounds implements Drawable {
         // |-----|
         // b is the middle of the bounding box, while o is 0,0 in coordinate space. In this case, the "center" point
         // was supposed to be (2,2), so o is offset from b by 2 in both directions.
-        init(new Polygon(new Point[] { new Point(-halfWidth - center.x, -halfHeight - center.y), new Point(halfWidth - center.x, -halfHeight - center.y), new Point(halfWidth - center.x, halfHeight - center.y), new Point(-halfWidth - center.x, halfHeight - center.y), new Point(-halfWidth - center.x, -halfHeight - center.y)}));
+        setShape(new Polygon(new Point[] { new Point(-halfWidth + center.x, -halfHeight + center.y), new Point(halfWidth + center.x, -halfHeight + center.y), new Point(halfWidth + center.x, halfHeight + center.y), new Point(-halfWidth + center.x, halfHeight + center.y), new Point(-halfWidth + center.x, -halfHeight + center.y)}));
     }
     
     public Skeleton(Image image) { this(image, new Point(0, 0)); }
