@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/home/dragon/NetBeansProjects/Alfredo/src/alfredo/util/ToolBox.java</file>
+            <file>file:/home/dragon/NetBeansProjects/Alfredo/src/alfredo/sprite/Transform.java</file>
+            <file>file:/home/dragon/NetBeansProjects/Alfredo/src/alfredo/sound/NullSound.java</file>
+            <file>file:/home/dragon/NetBeansProjects/Alfredo/src/alfredo/sprite/EntitySet.java</file>
+            <file>file:/home/dragon/NetBeansProjects/Alfredo/src/alfredo/paint/Image.java</file>
+            <file>file:/home/dragon/NetBeansProjects/Alfredo/src/alfredo/sprite/Bounds.java</file>
+            <file>file:/home/dragon/NetBeansProjects/Alfredo/src/alfredo/scene/Scene.java</file>
+            <file>file:/home/dragon/NetBeansProjects/Alfredo/src/alfredo/sound/Sound.java</file>
+            <file>file:/home/dragon/NetBeansProjects/Alfredo/src/alfredo/paint/StaticCamera.java</file>
+            <file>file:/home/dragon/NetBeansProjects/Alfredo/src/alfredo/Game.java</file>
+            <file>file:/home/dragon/NetBeansProjects/Alfredo/src/alfredo/sprite/Sprite.java</file>
+            <file>file:/home/dragon/NetBeansProjects/Alfredo/src/alfredo/timing/Interval.java</file>
+            <file>file:/home/dragon/NetBeansProjects/Alfredo/src/alfredo/paint/Canvas.java</file>
+            <file>file:/home/dragon/NetBeansProjects/Alfredo/src/alfredo/geom/Rectangle.java</file>
+            <file>file:/home/dragon/NetBeansProjects/Alfredo/src/alfredo/sound/SoundClip.java</file>
+            <file>file:/home/dragon/NetBeansProjects/Alfredo/src/alfredo/paint/Camera.java</file>
+            <file>file:/home/dragon/NetBeansProjects/Alfredo/src/alfredo/paint/Animation.java</file>
+            <file>file:/home/dragon/NetBeansProjects/Alfredo/src/alfredo/sprite/Force.java</file>
+            <file>file:/home/dragon/NetBeansProjects/Alfredo/src/alfredo/paint/WorldCamera.java</file>
+            <file>file:/home/dragon/NetBeansProjects/Alfredo/src/alfredo/sprite/Drawable.java</file>
+            <file>file:/home/dragon/NetBeansProjects/Alfredo/src/alfredo/util/Resources.java</file>
+            <file>file:/home/dragon/NetBeansProjects/Alfredo/src/alfredo/geom/Polygon.java</file>
+        </group>
+    </open-files>
+</project-private>

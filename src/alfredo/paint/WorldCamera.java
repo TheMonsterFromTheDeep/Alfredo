@@ -5,7 +5,7 @@ import alfredo.sprite.Worldly;
 
 public class WorldCamera extends Camera {
 
-    Point location;
+    public Point location;
     
     public WorldCamera(int width, int height) {
         super(width, height);
@@ -23,22 +23,22 @@ public class WorldCamera extends Camera {
 
     @Override
     public float xToScreen(float x) {
-        return x - location.x;
+        return (x - location.x);
     }
 
     @Override
     public float yToScreen(float y) {
-        return y - location.y;
+        return (y - location.y);
     }
 
     @Override
     public float xToWorld(float x) {
-        return x + location.x;
+        return (x + location.x);
     }
 
     @Override
     public float yToWorld(float y) {
-        return y + location.y;
+        return (y + location.y);
     }
     
     /**
@@ -48,6 +48,14 @@ public class WorldCamera extends Camera {
     public void track(Worldly w) {
         location.x = w.getWorldX();
         location.y = w.getWorldY();
+    }
+    
+    public void setX(float x) {
+        location.x = x;
+    }
+    
+    public void setY(float y) {
+        location.y = y;
     }
     
 }

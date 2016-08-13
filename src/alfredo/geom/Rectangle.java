@@ -45,7 +45,11 @@ public class Rectangle {
     }
     
     public boolean contains(float x, float y) {
-        return (x >= this.x && x < this.x + width && y >= this.y && y < this.y + width);
+        return (x >= this.x && x < this.x + width && y >= this.y && y < this.y + height);
+    }
+    
+    public boolean contains(Point p) {
+        return contains(p.x, p.y);
     }
     
     public boolean intersects(Rectangle r) {

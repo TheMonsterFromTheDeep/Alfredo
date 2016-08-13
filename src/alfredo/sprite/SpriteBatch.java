@@ -22,6 +22,9 @@ public class SpriteBatch {
         canvas.fill(background);
     }
     
+    public void drawEntity(Image i, Entity e) {
+        canvas.draw(i, e.getWorldX(), e.getWorldY(), e.getWorldDirection(), e.getWorldX(), e.getWorldY());
+    }
     
     public void draw(Image i, Drawable d) {
         canvas.draw(i, d.getDrawX(), d.getDrawY(), d.getDrawDirection(), d.getDrawPivotX(), d.getDrawPivotY());

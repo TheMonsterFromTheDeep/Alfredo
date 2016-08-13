@@ -8,4 +8,5 @@ public class NullSound implements Sound {
     @Override public void play() { }
     @Override public boolean playing() { return false; }
     @Override public void stop() { }
+    @Override public void loop() { }
 }

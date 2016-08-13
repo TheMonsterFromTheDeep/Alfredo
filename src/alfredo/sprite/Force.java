@@ -65,11 +65,11 @@ public class Force {
      * @return Whether the Force was modified - essentially, whether the parent bounds *is* in fact now "touching" the other object.
      */
     public boolean interact(Bounds b) {
-        float checkdx = b.getX() - handle.getX(); //TODO: Fix all local/global position problems!
-        float checkdy = b.getY() - handle.getY();
+        float checkdx = b.getWorldX() - handle.getWorldX(); //TODO: Fix all local/global position problems!
+        float checkdy = b.getWorldY() - handle.getWorldY();
         
         //If the bounds interacting is in the opposite direction, don't interact
-        if(((checkdx > 0) != (x > 0)) && ((checkdy > 0) != (y > 0))) { return false; }
+        if(((checkdx > 0) != (x > 0) || x == 0) && ((checkdy > 0) != (y > 0) || y == 0)) { return false; }
         //Should this be done with trig maybe?
         
         b.sync(); //Make sure bounds has position/rotation that it needs
@@ -129,6 +129,19 @@ public class Force {
         for(int i = 0; i < vectors.length; i++) {
             vectors[i].start.copyFrom(handle.bounds.points[i]);
             handle.bounds.points[i].getTranslation(dx, dy, vectors[i].end);
+        }
+        handle.getLocation().getTranslation(dx, dy, center);
+        
+        x = dx;
+        y = dy;
+    }
+    
+    public void reforce(Bounds b, float dx, float dy) {
+        handle = b;
+        handle.sync(); //Bounds *needs* right box position for this
+        vectors = new Line[handle.bounds.points.length];
+        for(int i = 0; i < vectors.length; i++) {
+            vectors[i] = new Line(handle.bounds.points[i], handle.bounds.points[i].getTranslation(dx, dy));
         }
         handle.getLocation().getTranslation(dx, dy, center);
         

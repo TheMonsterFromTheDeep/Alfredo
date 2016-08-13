@@ -19,7 +19,7 @@ public class SoundClip implements Sound {
         clip.setFramePosition(0);
         clip.start();
     }
-    
+
     @Override
     public boolean playing() {
         return clip.isRunning();
@@ -28,6 +28,15 @@ public class SoundClip implements Sound {
     @Override
     public void stop() {
         clip.stop();
+    }
+    
+    /**
+     * loops forever
+     */
+    @Override
+    public void loop() {
+        clip.setFramePosition(0);
+        clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
     
 }

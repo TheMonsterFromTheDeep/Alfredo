@@ -55,6 +55,11 @@ public class EntitySet<T extends Entity> implements Iterable<T> {
     
     public void add(T t) {
         if(t != null) {
+            if(nextWrite > entities.length) {
+                Entity[] tmp = entities;
+                entities = new Entity[(entities.length * 3) / 2]; //Increase memory by factor of 1.5
+                System.arraycopy(tmp, 0, entities, 0, tmp.length); //Copy old values over
+            }
             entities[nextWrite] = t; //Add new entity
             while(nextWrite < entities.length && entities[nextWrite] != null) { nextWrite++; }
             if(nextWrite == entities.length) { //No new null values!
@@ -88,7 +93,15 @@ public class EntitySet<T extends Entity> implements Iterable<T> {
      */
     public void removeCurrent() {
         //iterator.lastIndex refers to the current object returned by the iterator.next() function.
+        pool.remove(entities[iterator.lastIndex]);
         entities[iterator.lastIndex] = null;
+    }
+    
+    public void removeAll() {
+        for(int i = 0; i < entities.length; i++) {
+            pool.remove(entities[i]);
+            entities[i] = null;
+        }
     }
     
     @Override

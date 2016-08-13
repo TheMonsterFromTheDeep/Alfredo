@@ -96,4 +96,10 @@ public class Transform implements Worldly {
         setX(p.x);
         setY(p.y);
     }
+    
+    public final float distanceTo(Point p) {
+        float x = (getWorldX() - p.x);
+        float y = (getWorldY() - p.y);
+        return (float)Math.sqrt(x * x + y * y);
+    }
 }

@@ -10,6 +10,14 @@ public class StaticCamera extends Camera {
         super(width, height);
     }
     
+    public StaticCamera(Camera camera) {
+        this(camera.width, camera.height);
+    }
+    
+    public StaticCamera(Canvas canvas) {
+        this(canvas.width, canvas.height);
+    }
+    
     @Override
     public float xToScreen(float x) {
         return x;

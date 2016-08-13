@@ -50,6 +50,20 @@ public class Bounds extends Entity {
         setShape(base);
     }
     
+    public Bounds(float width, float height) {
+        this();
+        float hWidth = width / 2;
+        float hHeight = height / 2;
+        setShape(new Polygon(new Point[] { new Point(-hWidth, -hHeight), new Point(hWidth, -hHeight), new Point(hWidth, hHeight), new Point(-hWidth, hHeight), new Point(-hWidth, -hHeight) }));
+    }
+    
+    public Bounds(float width, float height, Point center) {
+        this();
+        float hWidth = width / 2;
+        float hHeight = height / 2;
+        setShape(new Polygon(new Point[] { new Point(-hWidth + center.x, -hHeight + center.y), new Point(hWidth + center.x, -hHeight + center.y), new Point(hWidth + center.x, hHeight + center.y), new Point(-hWidth + center.x, hHeight + center.y) }));
+    }
+    
     @Override
     public void setX(float x) {
         //bounds.translate(x - location.x, 0);

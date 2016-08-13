@@ -8,4 +8,5 @@ public interface Sound {
     void play();
     boolean playing();
     void stop();
+    void loop();
 }

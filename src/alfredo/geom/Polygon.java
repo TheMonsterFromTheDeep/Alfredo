@@ -19,9 +19,13 @@ public class Polygon {
     public Polygon(Point[] points) {
         this.points = points;
         
-        lines = new Line[points.length - 1];
-        for(int i = 0; i < lines.length; i++) {
+        //TODO: IMPLEMENT CHANGES ELSEWHERE
+        lines = new Line[points.length];// - 1];
+        for(int i = 0; i < lines.length - 1; i++) {
             lines[i] = new Line(points[i], points[i + 1]);
+        }
+        if(lines.length > 0) {
+            lines[lines.length - 1] = new Line(points[points.length - 1], points[0]);
         }
         
         calculateBounds();
@@ -125,8 +129,11 @@ public class Polygon {
         for(int i = 0; i < newPoints.length; i++) {
             newPoints[i] = new Point(points[i]);
         }
-        for(int i = 0; i < newLines.length; i++) {
+        for(int i = 0; i < newLines.length - 1; i++) {
             newLines[i] = new Line(newPoints[i], newPoints[i + 1]);
+        }
+        if(newLines.length > 0) {
+            newLines[newLines.length - 1] = new Line(newPoints[newPoints.length - 1], newPoints[0]);
         }
         Rectangle newBounds = new Rectangle(bounds);
         return new Polygon(newPoints, newLines, newBounds);

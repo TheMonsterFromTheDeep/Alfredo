@@ -56,4 +56,8 @@ public class Image {
         //Create dummy image
         image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
     }
+    
+    public Image(BufferedImage b) {
+        image = b;
+    }
 }

@@ -31,6 +31,19 @@ public class Canvas {
         return camera.yToScreen(y) + offsety;
     }
     
+    //#hax
+    private static int myRound(float i) {
+        return Math.round(Math.round(i * 100) / 100f);
+    }
+    
+    private int intTranslateX(float x) {
+        return (int)myRound(translateX(x));
+    }
+    
+    private int intTranslateY(float y) {
+        return (int)myRound(translateY(y));
+    }
+    
     public Canvas(int width, int height) {
         buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         graphics = buffer.createGraphics();
@@ -54,7 +67,8 @@ public class Canvas {
     }
     
     public void draw(Image i, float x, float y) {
-        graphics.drawImage(i.image, (int)translateX(x), (int)translateY(y), null);
+        //graphics.drawImage(i.image, (int)translateX(x), (int)translateY(y), null);
+        graphics.drawImage(i.image, intTranslateX(x), intTranslateY(y), null);
     }
     
     /**
@@ -109,13 +123,15 @@ public class Canvas {
         AffineTransformOp op = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
         op.filter(orig, filter);
         
-        graphics.drawImage(filter, (int)translateX(x + min.x), (int)translateY(y + min.y), null);
+        //graphics.drawImage(filter, (int)translateX(x + min.x), (int)translateY(y + min.y), null);
+        graphics.drawImage(filter, intTranslateX(x + min.x), intTranslateY(y + min.y), null);
     }
     
     public void ink(Polygon p, Color c) {
         graphics.setColor(c);
         for(Line l : p.lines) {
-            graphics.drawLine((int)translateX(l.start.x), (int)translateY(l.start.y), (int)translateX(l.end.x), (int)translateY(l.end.y));
+            //graphics.drawLine((int)translateX(l.start.x), (int)translateY(l.start.y), (int)translateX(l.end.x), (int)translateY(l.end.y));
+            graphics.drawLine(intTranslateX(l.start.x), intTranslateY(l.start.y), intTranslateX(l.end.x), intTranslateY(l.end.y));
         }
     }
     
@@ -126,4 +142,8 @@ public class Canvas {
     }
     
     public Camera getCamera() { return camera; }
+    
+    public BufferedImage getRender() {
+        return buffer;
+    }
 }

@@ -1,7 +1,3 @@
-#Ignore unimportant build metadata
+#Ignore generated README
 
-nbproject
-build
 dist/README.txt
-build.xml
-manifest.mf

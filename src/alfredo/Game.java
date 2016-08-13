@@ -194,6 +194,7 @@ public class Game extends Interval {
     
     public final void setScene(Scene scene) {
         this.scene = scene;
+        scene.onActivate();
     }
     
     public void setFullscreen(boolean fullscreen) {

@@ -29,4 +29,6 @@ public abstract class Scene {
     public abstract void loop();
     //Called whenever draw is called and the caller wants paint-based logic to be updated.
     public void iloop() { }
+    //canvas is parented to Game
+    public void onActivate() { }
 }
