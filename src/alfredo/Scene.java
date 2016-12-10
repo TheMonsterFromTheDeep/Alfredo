@@ -4,57 +4,43 @@ import alfredo.gfx.Renderer;
 import alfredo.phx.Physics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author TheMonsterOfTheDeep
  */
 public class Scene {
-    private static HashMap<String, Scene> sceneMap;
+    
+    private static ArrayList<Scene> scenes;
     private static Scene current = null;
     
-    public static void add(Scene s) {
-        if(s == null) { return; }
-        if(sceneMap == null) {
-            sceneMap = new HashMap();
+    public static <T extends Scene> void open(Class<T> sceneClass) {
+        if(scenes == null) {
+            scenes = new ArrayList();
         }
-        if(sceneMap.containsKey(s.name)) {
-            throw new IllegalStateException("Scene named " + s.name + " already exists!");
+        else {
+            for(Scene s : scenes) {
+                if(s.getClass() == sceneClass) {
+                    current = s;
+                    return;
+                }
+            }
         }
-        sceneMap.put(s.name, s);
-    }
-    
-    private static void open(Scene s) {
-        current = s;
-    }
-    
-    public static void open(String name) {
-        if(name == null) { throw new NullPointerException("Scene name cannot be null!"); }
-        if(sceneMap == null) { return; }
-        Scene next = sceneMap.get(name);
-        if(next == null) { throw new IllegalArgumentException("No scene named " + name + " exists!"); }
-        open(next);
-    }
-    
-    public static void begin(Scene s) {
-        if(s == null) { return; }
-        if(current != null) {
-            throw new IllegalStateException("Trying to begin with scene " + s.name + ", but a scene is already loaded!");
+        try {
+            current = sceneClass.newInstance();
+        } catch (InstantiationException | IllegalAccessException ex) {
+            System.out.println("Error setting scene: " + ex);
         }
-        add(s);
-        open(s);
+        scenes.add(current);
     }
     
     public static Scene getCurrent() { return current; }
     
-    private final String name;
-    
-    protected Scene(String name) {
-        this.name = name;
-    }
-    
-    public final String getName() { return name; }
+    public Scene() { }
     
     public void render(Canvas c) {
         c.clear();
