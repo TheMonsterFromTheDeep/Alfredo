@@ -3,5 +3,6 @@ nbproject/
 
 # build stuff
 build.xml
+manifest.mf
 build/
 dist/
