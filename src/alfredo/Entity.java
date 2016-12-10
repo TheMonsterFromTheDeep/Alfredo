@@ -14,8 +14,8 @@ public class Entity {
     public final Vector position;
     private final ArrayList<Component> components;
     
-    public static <T extends Entity> T create() {
-        T newEntity = (T)new Entity();
+    public static <T extends Entity> T create(Vector position) {
+        T newEntity = (T)new Entity(position);
         newEntity.init();
         
         if(entities == null) {
@@ -26,8 +26,16 @@ public class Entity {
         return newEntity;
     }
     
-    protected Entity() {
-        position = new Vector();
+    public static <T extends Entity> T create(float x, float y) {
+        return create(new Vector(x, y));
+    }
+    
+    public static <T extends Entity> T create() {
+        return create(new Vector());
+    }
+    
+    protected Entity(Vector position) {
+        this.position = position;
         components = new ArrayList();
     }
     

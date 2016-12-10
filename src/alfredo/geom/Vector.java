@@ -15,6 +15,7 @@ public class Vector {
     private void checkCache() {
         if(!cached) {
             magnitude = (float)Math.sqrt(x * x + y * y);
+            System.out.println("m: " + (x * x + y * y));
             direction = (float)Math.toDegrees(Math.atan2(y, x));
             cached = true;
         }

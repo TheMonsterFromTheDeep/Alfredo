@@ -36,7 +36,7 @@ public class Body extends Component {
     public void tick() {
         float delay = Game.getDelay() / 1000f;
         velocity.add(acceleration.x * delay, acceleration.y * delay);
-        parent.position.add(velocity.x * delay, velocity.y * delay);
+        parent.position.add(velocity.x, velocity.y);
     }
     
     public void addForce(Vector force) {
