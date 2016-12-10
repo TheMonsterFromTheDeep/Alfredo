@@ -1,5 +1,6 @@
 package alfredo;
 
+import alfredo.inpt.Keys;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -48,6 +49,8 @@ public class Game {
                 repaint();
             }
         };
+        
+        frame.addKeyListener(Keys.listener);
         
         panel.addComponentListener(new ComponentAdapter() {
             @Override
