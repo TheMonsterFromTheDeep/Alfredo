@@ -60,12 +60,26 @@ public class Canvas {
         
         Vector pivot = g.getPivot();
         
-        graphics.rotate(Math.toRadians(angle), x + w - pivot.x, y  + w - pivot.y);
-        graphics.translate(x, y);
+        graphics.rotate(Math.toRadians(angle), 0, 0);
+        graphics.translate(x - w - pivot.x, y - h - pivot.y);
+        
         
         graphics.setPaint(new TexturePaint(image, new Rectangle2D.Float(0, 0, image.getWidth(), image.getHeight())));
         graphics.fillRect(0, 0, image.getWidth(), image.getHeight());
         //graphics.drawImage(image, (int)x, (int)y, null);
+        
+        graphics.setTransform(old);
+    }
+    
+    public void fill(int color, float x, float y, float width, float height) {
+        
+        AffineTransform old = graphics.getTransform();
+        
+        graphics.translate(x, y);
+        graphics.scale(width, height);
+        
+        graphics.setColor(new Color(color));
+        graphics.fillRect(0, 0, 1, 1);
         
         graphics.setTransform(old);
     }
@@ -77,4 +91,7 @@ public class Canvas {
     public BufferedImage getRender() {
         return buffer;
     }
+    
+    public int getWidth() { return buffer.getWidth(); }
+    public int getHeight() { return buffer.getHeight(); }
 }

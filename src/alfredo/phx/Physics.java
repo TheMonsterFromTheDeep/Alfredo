@@ -23,11 +23,11 @@ public class Physics {
             if(b != null) { bodies.add(b); }
         }
         
-        Scene.getCurrent().tick();
-        
         for(Body b : bodies) {
-            b.accelerate(gravity);
+            b.acceleration.set(gravity);
         }
+        
+        Scene.getCurrent().tick();
         
         for(Body b : bodies) {
             b.tick();

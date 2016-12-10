@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
  * A Graphic object that is completely blank.
  * @author TheMonsterOfTheDeep
  */
-public class NullGraphic implements Graphic {
+public class NullGraphic extends Graphic {
     @Override
     public BufferedImage getRender() {
         return null;

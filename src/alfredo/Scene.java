@@ -1,5 +1,6 @@
 package alfredo;
 
+import alfredo.gfx.Renderer;
 import alfredo.phx.Physics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -57,6 +58,15 @@ public class Scene {
     
     public void render(Canvas c) {
         c.clear();
+        
+        Entity[] all = Entity.getAllEntities();
+        Renderer r;
+        for(Entity e : all) {
+            r = e.getComponent(Renderer.class);
+            if(r == null) { continue; }
+            c.draw(r.graphic, e.position.x, e.position.y);
+        }
+        
         draw(c);
     }
     
