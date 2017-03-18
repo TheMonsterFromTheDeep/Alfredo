@@ -10,6 +10,10 @@ public class Point {
         this.y = y;
     }
     
+    public Point(float dupli) {
+        this.x = this.y = dupli;
+    }
+    
     public Point(Point point) {
         this.x = point.x;
         this.y = point.y;

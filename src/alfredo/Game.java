@@ -132,8 +132,6 @@ public class Game extends Interval {
     public Game(String title, int width, int height, double scalex, double scaley) {
         super(DEFAULT_DELAY);
         
-        
-        
         frame = new GameFrame(title);
         panel = new GamePanel(width, height);
         panel.setPreferredSize(new Dimension((int)(width * scalex), (int)(height * scaley)));
@@ -173,15 +171,12 @@ public class Game extends Interval {
         this(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
     
-    public void setup() { }
-    
     public final void init() {
         game = this;
     }
     
     public final void run() {
         if(game == null) { game = this; }
-        setup();
         frame.setVisible(true);
         this.start();
     }

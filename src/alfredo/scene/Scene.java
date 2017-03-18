@@ -1,7 +1,9 @@
 package alfredo.scene;
 
 import alfredo.Game;
+import alfredo.paint.Camera;
 import alfredo.paint.Canvas;
+import alfredo.paint.StaticCamera;
 
 /**
  * Each Scene is some sort of graphical component of a game with its own graphical
@@ -16,6 +18,11 @@ public abstract class Scene {
 
             @Override
             public void loop() { }
+
+            @Override
+            public Camera getCamera() {
+                return new StaticCamera(this);
+            }
         };
     }
     
@@ -25,6 +32,8 @@ public abstract class Scene {
         this.parent = parent;
     }
 
+    public abstract Camera getCamera();
+    
     public abstract void draw(Canvas canvas);
     public abstract void loop();
     //Called whenever draw is called and the caller wants paint-based logic to be updated.

@@ -52,15 +52,20 @@ public class Rectangle {
         return contains(p.x, p.y);
     }
     
-    public boolean intersects(Rectangle r) {
-        float thisx = x;
-        float thisy = y;
-        float thiswidth = width;
-        float thisheight = height;
-        float rx = r.x;
-        float ry = r.y;
-        float rwidth = r.width;
-        float rheight = r.height;
-        return ((thisx + thiswidth > rx && thisx + thiswidth <= rx + rwidth) || (rx + rwidth > thisx && rx + rwidth <= thisx + thiswidth)) && ((thisy + thisheight > ry && thisy + thisheight <= ry + rheight) || (ry + rheight > thisy && ry + rheight <= thisy + thisheight));
+    public boolean doesNotTouch(Rectangle r) {
+        return (x + width < r.x || x > r.x + r.width) || (y + height < r.y || y > r.y + r.height);
+    }
+    
+    public boolean touches(Rectangle r) {
+        return !doesNotTouch(r);
+        //float thisx = x;
+       // float thisy = y;
+        //float thiswidth = width;
+       // float thisheight = height;
+        //float rx = r.x;
+       // float ry = r.y;
+        //float rwidth = r.width;
+        //float rheight = r.height;
+        //return ((thisx + thiswidth > rx && thisx + thiswidth <= rx + rwidth) || (rx + rwidth > thisx && rx + rwidth <= thisx + thiswidth)) && ((thisy + thisheight > ry && thisy + thisheight <= ry + rheight) || (ry + rheight > thisy && ry + rheight <= thisy + thisheight));
     }
 }

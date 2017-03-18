@@ -59,7 +59,7 @@ public class Polygon {
      * @return Whether the Polygons are intersecting.
      */
     public boolean intersects(Polygon check) {
-        if(!bounds.intersects(check.bounds)) { return false; }
+        if(!bounds.touches(check.bounds)) { return false; }
 
         for(Line line1 : lines) {
             for(Line line2 : check.lines) {
