@@ -74,6 +74,7 @@ public class Keys {
     public static final Key X = keys[KeyEvent.VK_X];
     public static final Key Y = keys[KeyEvent.VK_Y];
     public static final Key Z = keys[KeyEvent.VK_Z];
+    public static final Key SPACE = keys[KeyEvent.VK_SPACE];
     public static final Key ROW_0 = keys[KeyEvent.VK_0];
     public static final Key ROW_1 = keys[KeyEvent.VK_1];
     public static final Key ROW_2 = keys[KeyEvent.VK_2];

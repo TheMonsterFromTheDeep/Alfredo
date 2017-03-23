@@ -4,6 +4,11 @@ import alfredo.geom.Vector;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 /**
  * A Graphic that represents a single image.
@@ -20,6 +25,37 @@ public class ImageGraphic extends Graphic {
         g.setColor(new Color(color));
         g.fillRect(0, 0, width, height);
         return new ImageGraphic(image, new Vector());
+    }
+    
+    public static Graphic load(String path, Vector pivot) {
+        try {
+            BufferedImage image = ImageIO.read(ImageGraphic.class.getResourceAsStream(path));
+            return new ImageGraphic(image, pivot);
+        } catch (IOException ex) {
+            System.err.println("Error loading image: " + ex.getLocalizedMessage());
+            return new NullGraphic();
+        }
+    }
+    
+    public static Graphic load(String path) {
+        return load(path, new Vector());
+    }
+    
+    public static Graphic load(String path, Pivot p) {
+        try {
+            BufferedImage image = ImageIO.read(ImageGraphic.class.getResourceAsStream(path));
+            float w = image.getWidth() / 2f;
+            float h = image.getHeight() / 2f;
+            Vector pivot = 
+                    p == Pivot.TopLeft    ? new Vector(-w, -h) :
+                    p == Pivot.TopRight   ? new Vector( w, -h) :
+                    p == Pivot.BottomLeft ? new Vector(-w,  h) :
+                                            new Vector( w,  h);
+            return new ImageGraphic(image, pivot);
+        } catch (IOException ex) {
+            System.err.println("Error loading image: " + ex.getLocalizedMessage());
+            return new NullGraphic();
+        }
     }
     
     public ImageGraphic(BufferedImage image, Vector pivot) {

@@ -10,4 +10,12 @@ public class Component {
     public Component() {
         
     }
+    
+    public Entity getParent() { return parent; }
+    
+    public void ready() { }
+    public void tick() { }
+    public void draw(Canvas c) { }
+    
+    public void destroy() {}
 }

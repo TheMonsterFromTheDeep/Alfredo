@@ -1,5 +1,6 @@
 package alfredo.phx;
 
+import alfredo.Component;
 import alfredo.Entity;
 import alfredo.Scene;
 import alfredo.geom.Vector;
@@ -29,8 +30,10 @@ public class Physics {
         
         Scene.getCurrent().tick();
         
-        for(Body b : bodies) {
-            b.tick();
+        for(Entity e : entities) {
+            for (Component c : e.getComponents()) {
+                c.tick();
+            }
         }
     }
 }

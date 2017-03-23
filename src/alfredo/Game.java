@@ -1,5 +1,6 @@
 package alfredo;
 
+import alfredo.gfx.Graphic;
 import alfredo.inpt.Keys;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -10,6 +11,11 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -27,6 +33,8 @@ public class Game {
     private static Timer timer = null;
     private static Canvas canvas = null;
     
+    private static long tick = 0;
+    
     private static boolean init(int width, int height) {
         if(frame != null) { return false; }
         frame = new JFrame();
@@ -39,12 +47,16 @@ public class Game {
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 
+                long start = System.currentTimeMillis();
+                
                 g.setColor(Color.BLACK);
                 g.fillRect(0, 0, getWidth(), getHeight());
                 
                 Scene.getCurrent().render(canvas);
                 
                 g.drawImage(canvas.getRender(), 0, 0, null);
+               
+                //System.out.println("Time to paint: " + (System.currentTimeMillis() - start));
                 
                 repaint();
             }
@@ -64,7 +76,11 @@ public class Game {
         frame.pack();
         
         timer = new Timer(33, (ActionEvent e) -> {
+            long start = System.currentTimeMillis();
             Scene.getCurrent().loop();
+            
+            ++tick;
+            //System.out.println("Time to tick: " + (System.currentTimeMillis() - start));
         });
         
         return true;
@@ -100,6 +116,33 @@ public class Game {
     }
     
     public static int getDelay() {
+        init();
         return timer.getDelay();
+    }
+    
+    public static void saveScreenshot(String path) {
+        try {
+            ImageIO.write(canvas.getRender(), "PNG", new File(path + tick + ".png"));
+        } catch (IOException ex) {
+            System.err.println("Could not save screenshot: " + ex.getLocalizedMessage());
+        }
+    }
+    
+    public static void setIcon(Graphic icon) {
+        init();
+        BufferedImage b = icon.getRender();
+        if(b != null) {
+            frame.setIconImage(b);
+        }
+    }
+    
+    public static long getTick() {
+        return tick;
+    }
+    
+    static void updateCamera() {
+        init();
+        canvas.camera = Camera.getMain();
+        Camera.getMain().clip(canvas);
     }
 }

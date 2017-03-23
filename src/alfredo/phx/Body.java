@@ -33,6 +33,7 @@ public class Body extends Component {
         this(DEFAULT_MASS);
     }
     
+    @Override
     public void tick() {
         float delay = Game.getDelay() / 1000f;
         velocity.add(acceleration.x * delay, acceleration.y * delay);

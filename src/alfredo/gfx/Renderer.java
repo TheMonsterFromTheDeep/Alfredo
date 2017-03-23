@@ -9,6 +9,8 @@ import alfredo.Component;
 public class Renderer extends Component {
     public Graphic graphic;
     
+    public boolean active = true;
+    
     public Renderer(Graphic graphic) {
         this.graphic = graphic;
     }

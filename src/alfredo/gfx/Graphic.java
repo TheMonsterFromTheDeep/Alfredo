@@ -8,6 +8,13 @@ import java.awt.image.BufferedImage;
  * @author TheMonsterOfTheDeep
  */
 public abstract class Graphic {
+    public static enum Pivot {
+        TopLeft,
+        TopRight,
+        BottomLeft,
+        BottomRight
+    }
+    
     /**
      * Returns a BufferedImage that represents the current state of this
      * Graphic. A return value of "null" means that the image is blank.

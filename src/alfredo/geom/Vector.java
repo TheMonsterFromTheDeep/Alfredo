@@ -12,10 +12,13 @@ public class Vector {
     private float magnitude;
     private float direction;
     
+    public static Vector fromDirection(float length, float direction) {
+        return new Vector(length * (float)Math.cos(Math.toRadians(direction)), length * (float)Math.sin(Math.toRadians(direction)));
+    }
+    
     private void checkCache() {
         if(!cached) {
             magnitude = (float)Math.sqrt(x * x + y * y);
-            System.out.println("m: " + (x * x + y * y));
             direction = (float)Math.toDegrees(Math.atan2(y, x));
             cached = true;
         }
@@ -110,6 +113,11 @@ public class Vector {
         cached = false;
     }
     
+    public void move(float distance, double direction) {
+        x += distance * Math.cos(Math.toRadians(direction));
+        y += distance * Math.sin(Math.toRadians(direction));
+    }
+    
     public float getMagnitude() {
         checkCache();
         return magnitude;
@@ -118,5 +126,9 @@ public class Vector {
     public float getDirection() {
         checkCache();
         return direction;
+    }
+    
+    public float distance(Vector other) {
+        return (float) Math.sqrt( (other.x - x) * (other.x - x) + (other.y - y) * (other.y - y) );
     }
 }
