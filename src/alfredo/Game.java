@@ -2,15 +2,14 @@ package alfredo;
 
 import alfredo.gfx.Graphic;
 import alfredo.gfx.ImageGraphic;
-import alfredo.inpt.Keys;
+import alfredo.inpt.Key;
+import alfredo.inpt.Mouse;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -57,7 +56,9 @@ public class Game {
             }
         };
         
-        frame.addKeyListener(Keys.listener);
+        frame.addKeyListener(Key.listener);
+        panel.addMouseListener(Mouse.mouseListener);
+        panel.addMouseMotionListener(Mouse.motionListener);
         
         panel.addComponentListener(new ComponentAdapter() {
             @Override
