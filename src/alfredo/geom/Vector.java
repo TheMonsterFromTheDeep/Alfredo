@@ -42,6 +42,10 @@ public class Vector {
         this.y = orig.y;
     }
     
+    public Vector copy() {
+        return new Vector(this);
+    }
+    
     public void set(float x, float y) {
         this.x = x;
         this.y = y;
@@ -52,6 +56,11 @@ public class Vector {
         x = dupli.x;
         y = dupli.y;
         cached = false;
+    }
+    
+        
+    public void zero() {
+        set(0, 0);
     }
     
     public void setX(float x) { this.x = x; cached = false; }
@@ -130,5 +139,15 @@ public class Vector {
     
     public float distance(Vector other) {
         return (float) Math.sqrt( (other.x - x) * (other.x - x) + (other.y - y) * (other.y - y) );
+    }
+    
+    @Override
+    public String toString() {
+        //Only show two decimals worth of precision - I feel like this will be more useful for debugging
+        int xi = (int)Math.floor(x);
+        int xf = Math.round(x * 100) - 100 * xi;
+        int yi = (int)Math.floor(y);
+        int yf = Math.round(y * 100) - 100 * yi;
+        return "Vector(" + xi + "." + xf + ", " + yi + "." + yf + ")";
     }
 }
