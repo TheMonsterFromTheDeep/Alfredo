@@ -13,8 +13,6 @@ import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -47,16 +45,12 @@ public class Game {
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 
-                long start = System.currentTimeMillis();
-                
                 g.setColor(Color.BLACK);
                 g.fillRect(0, 0, getWidth(), getHeight());
                 
                 Scene.getCurrent().render(canvas);
                 
                 g.drawImage(canvas.getRender(), 0, 0, null);
-               
-                //System.out.println("Time to paint: " + (System.currentTimeMillis() - start));
                 
                 repaint();
             }
@@ -76,11 +70,9 @@ public class Game {
         frame.pack();
         
         timer = new Timer(33, (ActionEvent e) -> {
-            long start = System.currentTimeMillis();
             Scene.getCurrent().loop();
             
             ++tick;
-            //System.out.println("Time to tick: " + (System.currentTimeMillis() - start));
         });
         
         return true;
