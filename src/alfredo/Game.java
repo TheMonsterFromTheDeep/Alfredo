@@ -1,6 +1,7 @@
 package alfredo;
 
 import alfredo.gfx.Graphic;
+import alfredo.gfx.ImageGraphic;
 import alfredo.inpt.Keys;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -98,6 +99,15 @@ public class Game {
     
     public static void play() {
         init();
+        
+        BufferedImage icon;
+        try {
+            icon = ImageGraphic.read("/resrc/img/icon.png");
+            frame.setIconImage(icon);
+        } catch (Exception ex) {
+            System.out.println("No icon image found (resrc/img/icon.png)");
+        }
+        
         frame.setVisible(true);
         timer.start();
     }

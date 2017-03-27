@@ -27,11 +27,15 @@ public class ImageGraphic extends Graphic {
         return new ImageGraphic(image, new Vector());
     }
     
+    public static BufferedImage read(String path) throws IOException {
+        return ImageIO.read(ImageGraphic.class.getResourceAsStream(path));
+    }
+    
     public static Graphic load(String path, Vector pivot) {
         try {
             BufferedImage image = ImageIO.read(ImageGraphic.class.getResourceAsStream(path));
             return new ImageGraphic(image, pivot);
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             System.err.println("Error loading image: " + ex.getLocalizedMessage());
             return new NullGraphic();
         }
@@ -52,7 +56,7 @@ public class ImageGraphic extends Graphic {
                     p == Pivot.BottomLeft ? new Vector(-w,  h) :
                                             new Vector( w,  h);
             return new ImageGraphic(image, pivot);
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             System.err.println("Error loading image: " + ex.getLocalizedMessage());
             return new NullGraphic();
         }
