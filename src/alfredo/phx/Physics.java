@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * @author TheMonsterOfTheDeep
  */
 public class Physics {
-    public static Vector gravity = new Vector(0, 9.81f);
+    public static final Vector gravity = new Vector(0, 9.807f);
     
     public static void tick() {
         Entity[] entities = Entity.getAllEntities();
