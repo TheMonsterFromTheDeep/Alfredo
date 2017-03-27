@@ -82,12 +82,12 @@ public class Game {
         return init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
     
-    public static void setTitle(String title) {
+    public static void title(String title) {
         init();
         frame.setTitle(title);
     }
     
-    public static void setSize(int width, int height) {
+    public static void size(int width, int height) {
         if(!init(width, height)) {
             panel.setPreferredSize(new Dimension(width, height));
             frame.pack();
