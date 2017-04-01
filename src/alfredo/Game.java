@@ -1,21 +1,7 @@
 package alfredo;
 
 import alfredo.gfx.Graphic;
-import alfredo.gfx.ImageGraphic;
-import alfredo.inpt.Key;
-import alfredo.inpt.Mouse;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.Timer;
 
 /**
@@ -26,117 +12,89 @@ public class Game {
     public static final int DEFAULT_WIDTH = 600;
     public static final int DEFAULT_HEIGHT = 400;
     
-    private static JFrame frame = null;
-    private static JPanel panel = null;
-    private static Timer timer = null;
+    private static Platform gamePlatform = null;
+    
+    public static interface Platform {
+        void create(Canvas canvas);
+        void title(String title);
+        void size(float width, float height);
+        void setIcon(Graphic icon);
+        void run();
+        void saveScreenshot(String path);
+    }
+    
     private static Canvas canvas = null;
     
     private static long tick = 0;
+    private static Timer timer = null;
     
-    private static boolean init(int width, int height) {
-        if(frame != null) { return false; }
-        frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public static <T extends Platform> void platform(Class<T> platformClass) {
+        if(gamePlatform != null) {
+            throw new IllegalStateException("Game platform already established!");
+        }
         
-        canvas = new Canvas(width, height);
+        try {
+            gamePlatform = platformClass.newInstance();
+        } catch (InstantiationException | IllegalAccessException ex) { }
         
-        panel = new JPanel() {
-            @Override
-            public void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                
-                g.setColor(Color.BLACK);
-                g.fillRect(0, 0, getWidth(), getHeight());
-                
-                Scene.getCurrent().render(canvas);
-                
-                g.drawImage(canvas.getRender(), 0, 0, null);
-                
-                repaint();
-            }
-        };
-        
-        frame.addKeyListener(Key.listener);
-        panel.addMouseListener(Mouse.mouseListener);
-        panel.addMouseMotionListener(Mouse.motionListener);
-        
-        panel.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                canvas.resize(panel.getWidth(), panel.getHeight());
-            }
-        });
-        
-        panel.setPreferredSize(new Dimension(width, height));
-        frame.add(panel);
-        frame.pack();
+        canvas = new Canvas(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        gamePlatform.create(canvas);
         
         timer = new Timer(33, (ActionEvent e) -> {
             Scene.getCurrent().loop();
             
             ++tick;
         });
-        
-        return true;
     }
     
-    private static boolean init() {
-        return init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-    }
-    
-    public static void title(String title) {
-        init();
-        frame.setTitle(title);
-    }
-    
-    public static void size(int width, int height) {
-        if(!init(width, height)) {
-            panel.setPreferredSize(new Dimension(width, height));
-            frame.pack();
-            
-            canvas.resize(width, height);
+    private static void testPlatform() {
+        if(gamePlatform == null) {
+            throw new IllegalStateException("Cannot perform action until Game.platform() has been called!");
         }
     }
     
-    public static void play() {
-        init();
-        
+    public static void title(String title) {
+        testPlatform();
+        gamePlatform.title(title);
+    }
+    
+    public static void size(float width, float height) {
+        testPlatform();
+        gamePlatform.size(width, height);
+        canvas.resize((int)width, (int)height);
+    }
+    
+    public static void play() {        
+        /* TODO: Reimplement this
         BufferedImage icon;
         try {
             icon = ImageGraphic.read("/resrc/img/icon.png");
             frame.setIconImage(icon);
         } catch (Exception ex) {
             System.out.println("No icon image found (resrc/img/icon.png)");
-        }
+        }*/
         
-        frame.setVisible(true);
+        testPlatform();
+        gamePlatform.run();
         timer.start();
     }
     
     public static void setDelay(int ms) {
-        init();
         timer.setDelay(ms);
     }
     
     public static int getDelay() {
-        init();
         return timer.getDelay();
     }
     
     public static void saveScreenshot(String path) {
-        try {
-            ImageIO.write(canvas.getRender(), "PNG", new File(path + tick + ".png"));
-        } catch (IOException ex) {
-            System.err.println("Could not save screenshot: " + ex.getLocalizedMessage());
-        }
+        testPlatform();
+        gamePlatform.saveScreenshot(path);
     }
     
     public static void setIcon(Graphic icon) {
-        init();
-        BufferedImage b = icon.getRender();
-        if(b != null) {
-            frame.setIconImage(b);
-        }
+        testPlatform();
+        gamePlatform.setIcon(icon);
     }
     
     public static long getTick() {
@@ -144,7 +102,7 @@ public class Game {
     }
     
     static void updateCamera() {
-        init();
+        testPlatform();
         canvas.camera = Camera.getMain();
         Camera.getMain().clip(canvas);
     }

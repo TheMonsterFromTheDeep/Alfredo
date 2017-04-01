@@ -8,32 +8,13 @@ import java.awt.event.KeyListener;
  * @author TheMonsterOfTheDeep
  */
 public class Key {        
-    private static final Button.Source[] keys = new Button.Source[256];
+    public static final Button.Source[] keys = new Button.Source[256];
     
-    public static final KeyListener listener = new KeyListener() {
-        @Override
-        public void keyTyped(KeyEvent e) {
-            
+    static {
+        for(int i = 0; i < keys.length; ++i) {
+            keys[i] = new Button.Source();
         }
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-            for(int i = 0; i < keys.length; ++i) {
-                if(i == e.getKeyCode()) {
-                    keys[i].press();
-                }
-            }
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
-            for(int i = 0; i < keys.length; ++i) {
-                if(i == e.getKeyCode()) {
-                    keys[i].release();
-                }
-            }
-        }
-    };
+    }
     
     public static final Button.Source SHIFT = keys[KeyEvent.VK_SHIFT];
     public static final Button.Source A = keys[KeyEvent.VK_A];
