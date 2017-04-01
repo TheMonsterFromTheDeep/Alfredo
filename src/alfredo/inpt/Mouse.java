@@ -9,8 +9,6 @@ import java.awt.event.MouseMotionListener;
  * @author TheMonsterOfTheDeep
  */
 public class Mouse {
-    public static class MouseButton extends Button.Device { }
-    public static class Pointer extends Cursor.Device { }
     
     public static final MouseListener mouseListener = new MouseListener() {
         @Override
@@ -44,8 +42,8 @@ public class Mouse {
         }
     };
     
-    public static final MouseButton LMB = new MouseButton();
-    public static final MouseButton MMB = new MouseButton();
-    public static final MouseButton RMB = new MouseButton();
-    public static final Pointer     pointer = new Pointer();
+    public static final Button.Source LMB = new Button.Source();
+    public static final Button.Source MMB = new Button.Source();
+    public static final Button.Source RMB = new Button.Source();
+    public static final Cursor.Source pointer = new Cursor.Source();
 }

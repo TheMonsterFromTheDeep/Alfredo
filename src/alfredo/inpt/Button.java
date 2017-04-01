@@ -12,14 +12,14 @@ public final class Button {
         void perform();
     }
     
-    public static class Device {
+    public static class Source {
         private final ArrayList<Button> buttons;
         
-        public Device() {
+        public Source() {
             buttons = new ArrayList();
         }
         
-        protected void press() {
+        public void press() {
             for(Button b : buttons) {
                  /* Keyboards will repeatedly claim to be pressed - we only want to activate *
                   * event once until it is released and pressed again                        */
@@ -29,7 +29,7 @@ public final class Button {
             }
         }
         
-        protected void release() {
+        public void release() {
             for(Button b : buttons) {
                 if(b.pressed) {
                     b.performRelease();
@@ -46,7 +46,7 @@ public final class Button {
         }
     }
     
-    private Device device = null;
+    private Source device = null;
     private boolean pressed = false;
     
     private final ArrayList<Action> downActions = new ArrayList();
@@ -86,12 +86,12 @@ public final class Button {
         return new Button();
     }
     
-    public static Button create(Device d) {
+    public static Button create(Source d) {
         Button b = new Button();
         return b.setDevice(d);
     }
     
-    public Button setDevice(Device d) {
+    public Button setDevice(Source d) {
         if(d == null) {
             System.out.println("Warning: Attempting to assign Button null device");
             return this;

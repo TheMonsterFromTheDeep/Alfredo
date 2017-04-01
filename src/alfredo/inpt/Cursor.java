@@ -15,14 +15,14 @@ public class Cursor {
         void moved(Vector to);
     }
     
-    public static class Device {
+    public static class Source {
         private final ArrayList<Cursor> cursors;
         
-        public Device() {
+        public Source() {
             cursors = new ArrayList();
         }
         
-        protected void set(float x, float y) {
+        public void set(float x, float y) {
             for(Cursor c : cursors) {
                 c.move(x, y);
             }
@@ -38,7 +38,7 @@ public class Cursor {
     }
     
     private final Vector position;
-    private Device device = null;
+    private Source device = null;
     
     private final ArrayList<Action> actions = new ArrayList();
     
@@ -75,12 +75,12 @@ public class Cursor {
         return new Cursor();
     }
     
-    public static Cursor create(Cursor.Device d) {
+    public static Cursor create(Cursor.Source d) {
         Cursor c = new Cursor();
         return c.setDevice(d);
     }
     
-    public Cursor setDevice(Cursor.Device d) {
+    public Cursor setDevice(Cursor.Source d) {
         if(d == null) {
             System.out.println("Warning: Attempting to assign Cursor null device");
             return this;
