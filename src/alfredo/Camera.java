@@ -37,6 +37,16 @@ public abstract class Camera {
 
         @Override
         public void clip(Canvas c) {}
+
+        @Override
+        public float windowX(float x) {
+            return x;
+        }
+
+        @Override
+        public float windowY(float y) {
+            return y;
+        }
     }
     
     public static final class Fit extends Camera {
@@ -97,6 +107,16 @@ public abstract class Camera {
         public void clip(Canvas c) {
             c.clip(Math.round(xoffset), Math.round(yoffset), Math.round(baseWidth * scale), Math.round(baseHeight * scale));
         }
+
+        @Override
+        public float windowX(float x) {
+            return (x - xoffset) / scale;
+        }
+
+        @Override
+        public float windowY(float y) {
+            return (y - yoffset) / scale;
+        }
     }
     
     private static Camera main;
@@ -118,6 +138,8 @@ public abstract class Camera {
     
     public abstract float viewportX(float x);
     public abstract float viewportY(float y);
+    public abstract float windowX(float x);
+    public abstract float windowY(float y);
     
     public final float screenX(float x) {
         return viewportX(x) + position.x;
