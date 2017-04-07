@@ -1,14 +1,8 @@
 package alfredo;
 
-import alfredo.geom.Vector;
-import alfredo.gfx.Renderer;
+import alfredo.gfx.Spriter;
 import alfredo.phx.Physics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -57,25 +51,20 @@ public class Scene {
     
     public Scene() { }
     
-    public void render(Canvas c) {
-        c.clear();
-        c.fill(bgcolor, 0, 0, Camera.getMain().getViewport());
+    public void render(Spriter s) {
+        s.clear();
+        s.fill(bgcolor, 0, 0, Camera.getMain().getViewport());
         
-        backdrop(c);
+        backdrop(s);
         
         Entity[] all = Entity.getAllEntities();
-        Renderer r;
         for(Entity e : all) {
             for(Component co : e.getComponents()) {
-                co.draw(c);
+                co.draw(s);
             }
-            r = e.getComponent(Renderer.class);
-            if(r == null) { continue; }
-            if(!r.active) { continue; }
-            c.draw(r.graphic, e.position, e.direction);
         }
         
-        draw(c);
+        draw(s);
     }
     
     public void loop() {
@@ -83,6 +72,6 @@ public class Scene {
     }
     
     public void tick() { }
-    public void backdrop(Canvas c) { }
-    public void draw(Canvas c) { }
+    public void backdrop(Spriter s) { }
+    public void draw(Spriter s) { }
 }

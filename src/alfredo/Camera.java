@@ -1,6 +1,7 @@
 package alfredo;
 
 import alfredo.geom.Vector;
+import alfredo.gfx.Spriter;
 
 /**
  *
@@ -36,7 +37,7 @@ public abstract class Camera {
         }
 
         @Override
-        public void clip(Canvas c) {}
+        public void clip(Spriter c) {}
 
         @Override
         public float windowX(float x) {
@@ -104,7 +105,7 @@ public abstract class Camera {
         }
 
         @Override
-        public void clip(Canvas c) {
+        public void clip(Spriter c) {
             c.clip(Math.round(xoffset), Math.round(yoffset), Math.round(baseWidth * scale), Math.round(baseHeight * scale));
         }
 
@@ -153,5 +154,5 @@ public abstract class Camera {
     
     public abstract Vector getViewport();
     
-    public abstract void clip(Canvas c);
+    public abstract void clip(Spriter s);
 }

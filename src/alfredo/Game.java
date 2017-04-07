@@ -1,6 +1,5 @@
 package alfredo;
 
-import alfredo.gfx.Graphic;
 import java.awt.event.ActionEvent;
 import javax.swing.Timer;
 
@@ -15,15 +14,13 @@ public class Game {
     private static Platform gamePlatform = null;
     
     public static interface Platform {
-        void create(Canvas canvas);
+        void create(int width, int height);
         void title(String title);
         void size(float width, float height);
-        void setIcon(Graphic icon);
+        void setIcon(String path);
         void run();
         void saveScreenshot(String path);
     }
-    
-    private static Canvas canvas = null;
     
     private static long tick = 0;
     private static Timer timer = null;
@@ -37,8 +34,8 @@ public class Game {
             gamePlatform = platformClass.newInstance();
         } catch (InstantiationException | IllegalAccessException ex) { }
         
-        canvas = new Canvas(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-        gamePlatform.create(canvas);
+        //canvas = new Canvas(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        gamePlatform.create(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         
         timer = new Timer(33, (ActionEvent e) -> {
             Scene.getCurrent().loop();
@@ -61,7 +58,7 @@ public class Game {
     public static void size(float width, float height) {
         testPlatform();
         gamePlatform.size(width, height);
-        canvas.resize((int)width, (int)height);
+        //canvas.resize((int)width, (int)height);
     }
     
     public static void play() {        
@@ -92,9 +89,9 @@ public class Game {
         gamePlatform.saveScreenshot(path);
     }
     
-    public static void setIcon(Graphic icon) {
+    public static void setIcon(String path) {
         testPlatform();
-        gamePlatform.setIcon(icon);
+        gamePlatform.setIcon(path);
     }
     
     public static long getTick() {
@@ -103,7 +100,7 @@ public class Game {
     
     static void updateCamera() {
         testPlatform();
-        canvas.camera = Camera.getMain();
-        Camera.getMain().clip(canvas);
+        //canvas.camera = Camera.getMain();
+        //Camera.getMain().clip(canvas);
     }
 }

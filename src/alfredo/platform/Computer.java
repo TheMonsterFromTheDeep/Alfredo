@@ -1,16 +1,13 @@
 package alfredo.platform;
 
-import alfredo.Canvas;
 import alfredo.Game;
 import alfredo.Scene;
-import alfredo.geom.Vector;
-import alfredo.gfx.Graphic;
+import alfredo.gfx.Spriter;
 import alfredo.inpt.Key;
 import alfredo.inpt.Mouse;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
@@ -24,7 +21,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.Timer;
 
 /**
  * Represents a device that can be accessed through AWT.
@@ -35,16 +31,16 @@ public class Computer implements Game.Platform {
     private JFrame frame;
     private JPanel panel;
     
-    private Canvas canvas;
+    //private Canvas canvas;
+    private AWTSpriter spriter;
     
     @Override
-    public void create(Canvas canvas) {
+    public void create(int width, int height) {
         frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        
-        this.canvas = canvas;
-        //canvas = new Canvas(width, height);
+        this.spriter = new AWTSpriter(width, height);
+        Spriter.setSpriter(spriter); //TODO: Make this happen in Game, should *NOT* be part of the interface
         
         panel = new JPanel() {
             @Override
@@ -54,9 +50,9 @@ public class Computer implements Game.Platform {
                 g.setColor(Color.BLACK);
                 g.fillRect(0, 0, getWidth(), getHeight());
                 
-                Scene.getCurrent().render(canvas);
+                Scene.getCurrent().render(spriter);
                 
-                g.drawImage(canvas.getRender(), 0, 0, null);
+                g.drawImage(spriter.buffer, 0, 0, null);
                 
                 repaint();
             }
@@ -117,11 +113,11 @@ public class Computer implements Game.Platform {
         panel.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                canvas.resize(panel.getWidth(), panel.getHeight());
+                spriter.resize(panel.getWidth(), panel.getHeight());
             }
         });
         
-        panel.setPreferredSize(new Dimension(canvas.getWidth(), canvas.getHeight()));
+        panel.setPreferredSize(new Dimension(width, height));
         frame.add(panel);
         frame.pack();
         
@@ -136,14 +132,15 @@ public class Computer implements Game.Platform {
     @Override
     public void size(float width, float height) {
         panel.setPreferredSize(new Dimension((int)width, (int)height));
+        spriter.resize((int)width, (int)height);
         frame.pack();
     }
 
     @Override
-    public void setIcon(Graphic icon) {
-        BufferedImage b = icon.getRender();
-        if(b != null) {
-            frame.setIconImage(b);
+    public void setIcon(String path) {
+        BufferedImage icon = AWTSpriter.load(path);
+        if(icon != null) {
+            frame.setIconImage(icon);
         }
     }
     
@@ -155,7 +152,7 @@ public class Computer implements Game.Platform {
     @Override
     public void saveScreenshot(String path) {
         try {
-            ImageIO.write(canvas.getRender(), "PNG", new File(path + Game.getTick() + ".png"));
+            ImageIO.write(spriter.buffer, "PNG", new File(path + Game.getTick() + ".png"));
         } catch (IOException ex) {
             System.err.println("Could not save screenshot: " + ex.getLocalizedMessage());
         }
