@@ -1,6 +1,2 @@
 # Alfredo
-Alfredo is a game library for Java built on top of Java AWT.
-
-It provides methods for drawing sprites and other things.
-
-It is largely built on a singleton model where modules such as the Mouse class are activated as soon as possible.
+Alfredo is the game library that I use for all my Ludum Dare games. It's slowly evolving over time, and as of now, it is component-based with singleton classes for configuration.
