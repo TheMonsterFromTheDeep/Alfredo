@@ -1,3 +1,8 @@
-#Ignore generated README
+# netbeans
+nbproject/
 
-dist/README.txt
+# build stuff
+build.xml
+manifest.mf
+build/
+dist/
