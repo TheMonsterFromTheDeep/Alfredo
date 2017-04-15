@@ -111,6 +111,10 @@ public class Entity {
         position.add((float)(distance * Math.cos(Math.toRadians(direction))), (float)(distance * Math.sin(Math.toRadians(direction))));
     }
     
+    public final void moveNormal(float distance) {
+        position.add((float)(distance * Math.sin(Math.toRadians(direction))), (float)(distance * Math.cos(Math.toRadians(direction))));
+    }
+    
     public final Component[] getComponents() {
         return components.toArray(new Component[0]);
     }
@@ -131,5 +135,13 @@ public class Entity {
             if(e.getComponent(type) != null) { return e; }
         }
         return null;
+    }
+    
+    public static <T extends Component> Entity[] getAllWithComponent(Class<T> type) {
+        ArrayList<Entity> all = new ArrayList();
+        for(Entity e : entities) {
+            if(e.getComponent(type) != null) { all.add(e); }
+        }
+        return all.toArray(new Entity[0]);
     }
 }
