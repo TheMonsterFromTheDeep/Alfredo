@@ -27,7 +27,7 @@ public class Sound {
             return new Sound(clip);        
         } 
         catch (Exception e) { //Catch all exceptions because multicatch *will* fail sometimes :/
-            System.err.println("Failed to load audio resource (" + path + "): " + e.getLocalizedMessage());
+            Debug.error("Failed to load audio resource (" + path + "): " + e.getLocalizedMessage());
             return new Sound(null);
         }
     }

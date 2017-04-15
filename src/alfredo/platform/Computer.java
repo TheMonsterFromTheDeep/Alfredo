@@ -1,5 +1,6 @@
 package alfredo.platform;
 
+import alfredo.Debug;
 import alfredo.Game;
 import alfredo.Scene;
 import alfredo.gfx.Spriter;
@@ -35,12 +36,11 @@ public class Computer implements Game.Platform {
     private AWTSpriter spriter;
     
     @Override
-    public void create(int width, int height) {
+    public Spriter create(int width, int height) {
         frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         this.spriter = new AWTSpriter(width, height);
-        Spriter.setSpriter(spriter); //TODO: Make this happen in Game, should *NOT* be part of the interface
         
         panel = new JPanel() {
             @Override
@@ -121,7 +121,7 @@ public class Computer implements Game.Platform {
         frame.add(panel);
         frame.pack();
         
-        
+        return spriter;
     }
     
     @Override
@@ -137,10 +137,14 @@ public class Computer implements Game.Platform {
     }
 
     @Override
-    public void setIcon(String path) {
-        BufferedImage icon = AWTSpriter.load(path);
-        if(icon != null) {
+    public boolean setIcon(String path) {
+        try {
+            BufferedImage icon = AWTSpriter.load(path);
             frame.setIconImage(icon);
+            return true;
+        }
+        catch (Exception ex) {
+            return false;
         }
     }
     
@@ -156,5 +160,10 @@ public class Computer implements Game.Platform {
         } catch (IOException ex) {
             System.err.println("Could not save screenshot: " + ex.getLocalizedMessage());
         }
+    }
+
+    @Override
+    public Debug.Logger createLogger() {
+        return null; //This will keep the standard logger
     }
 }

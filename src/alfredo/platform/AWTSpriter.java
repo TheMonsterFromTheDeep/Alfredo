@@ -66,13 +66,8 @@ public final class AWTSpriter extends Spriter {
         createBuffer(width, height);
     }
     
-    public static BufferedImage load(String path) {
-        try {
-            return ImageIO.read(AWTSpriter.class.getResourceAsStream(path));
-        } catch (Exception ex) {
-            System.err.println("Could not load image!");
-            return null;
-        }
+    public static BufferedImage load(String path) throws Exception {
+        return ImageIO.read(AWTSpriter.class.getResourceAsStream(path));
     }
     
     private static BufferedImage loadSprite(String path) {
@@ -147,6 +142,4 @@ public final class AWTSpriter extends Spriter {
         graphics.setColor(Color.BLACK);
         graphics.fillRect(0, 0, buffer.getWidth(), buffer.getHeight());
     }
-    
-    
 }

@@ -1,5 +1,6 @@
 package alfredo;
 
+import alfredo.gfx.Spriter;
 import java.awt.event.ActionEvent;
 import javax.swing.Timer;
 
@@ -14,12 +15,13 @@ public class Game {
     private static Platform gamePlatform = null;
     
     public static interface Platform {
-        void create(int width, int height);
+        Spriter create(int width, int height);
         void title(String title);
         void size(float width, float height);
-        void setIcon(String path);
+        boolean setIcon(String path);
         void run();
         void saveScreenshot(String path);
+        Debug.Logger createLogger();
     }
     
     private static long tick = 0;
@@ -34,8 +36,8 @@ public class Game {
             gamePlatform = platformClass.newInstance();
         } catch (InstantiationException | IllegalAccessException ex) { }
         
-        //canvas = new Canvas(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-        gamePlatform.create(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        Spriter.setSpriter(gamePlatform.create(DEFAULT_WIDTH, DEFAULT_HEIGHT));
+        Debug.setLogger(gamePlatform.createLogger());
         
         timer = new Timer(33, (ActionEvent e) -> {
             Scene.getCurrent().loop();
@@ -58,7 +60,6 @@ public class Game {
     public static void size(float width, float height) {
         testPlatform();
         gamePlatform.size(width, height);
-        //canvas.resize((int)width, (int)height);
     }
     
     public static void play() {        
@@ -72,6 +73,11 @@ public class Game {
         }*/
         
         testPlatform();
+        
+        if(!gamePlatform.setIcon("/resrc/img/icon.png")) {
+            Debug.info("No icon image found (resrc/img/icon.png)");
+        }
+        
         gamePlatform.run();
         timer.start();
     }
@@ -89,18 +95,11 @@ public class Game {
         gamePlatform.saveScreenshot(path);
     }
     
-    public static void setIcon(String path) {
-        testPlatform();
-        gamePlatform.setIcon(path);
-    }
-    
     public static long getTick() {
         return tick;
     }
     
     static void updateCamera() {
         testPlatform();
-        //canvas.camera = Camera.getMain();
-        //Camera.getMain().clip(canvas);
     }
 }
