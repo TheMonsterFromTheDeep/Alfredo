@@ -93,7 +93,7 @@ public abstract class Camera {
         public float viewportY(float y) {
             return yoffset + scale * y;
         }
-
+        
         @Override
         public float getScale() {
             return scale;
@@ -111,12 +111,12 @@ public abstract class Camera {
 
         @Override
         public float windowX(float x) {
-            return (x - xoffset) / scale;
+            return (x - xoffset) / scale - position.x;
         }
 
         @Override
         public float windowY(float y) {
-            return (y - yoffset) / scale;
+            return (y - yoffset) / scale - position.y;
         }
     }
     
@@ -143,10 +143,10 @@ public abstract class Camera {
     public abstract float windowY(float y);
     
     public final float screenX(float x) {
-        return viewportX(x) + position.x;
+        return viewportX(x + position.x);
     }
     public final float screenY(float y) {
-        return viewportY(y) + position.y;
+        return viewportY(y + position.y);
     }
     public abstract float getScale();
     

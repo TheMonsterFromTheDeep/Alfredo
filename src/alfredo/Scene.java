@@ -53,7 +53,7 @@ public class Scene {
     
     public void render(Spriter s) {
         s.clear();
-        s.fill(bgcolor, 0, 0, Camera.getMain().getViewport());
+        s.fill(bgcolor, -Camera.getMain().position.x, -Camera.getMain().position.y, Camera.getMain().getViewport());
         
         backdrop(s);
         
