@@ -62,6 +62,7 @@ public class IndexedStringDict<T> {
             if(e.key.equals(key)) {
                 return new Or(index);
             }
+            ++index;
         }
         return new Or(null);
     }
