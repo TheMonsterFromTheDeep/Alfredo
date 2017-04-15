@@ -1,6 +1,7 @@
 package alfredo.gfx;
 
 import alfredo.Camera;
+import alfredo.Debug;
 import alfredo.geom.Vector;
 
 /**
@@ -19,7 +20,7 @@ public abstract class Spriter {
     }
     
     protected static final void error(String path, Exception e) {
-        System.err.println("Failed to load Sprite " + path + ": " + e.getLocalizedMessage());
+        Debug.error("Failed to load Sprite " + path + ": " + e.getLocalizedMessage());
     }
     
     protected abstract SpriteSource getSource(String path);
