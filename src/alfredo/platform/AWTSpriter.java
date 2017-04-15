@@ -31,7 +31,10 @@ public final class AWTSpriter extends Spriter {
         if(width <= 0) { width = 1; }
         if(height <= 0) { height = 1; }
         
-        BufferedImage old = buffer;
+        if(buffer != null) {
+            buffer.flush();
+        }
+        
         buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         
         Shape oldClip = null;
@@ -47,11 +50,6 @@ public final class AWTSpriter extends Spriter {
         
         if(oldClip != null) {
             graphics.setClip(oldClip);
-        }
-        
-        if(old != null) {
-            graphics.drawImage(old, 0, 0, null);
-            old.flush();
         }
     }
     
