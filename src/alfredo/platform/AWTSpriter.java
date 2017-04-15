@@ -84,7 +84,7 @@ public final class AWTSpriter extends Spriter {
     }
     
     @Override
-    public void draw(Sprite s, float x, float y, double angle, float opacity) {     
+    protected void drawImpl(Sprite s, float x, float y, double angle, float opacity) {     
         BufferedImage image = dict.getAlways(s.getIndex());
 
         if(image == null) { return; }
@@ -95,9 +95,6 @@ public final class AWTSpriter extends Spriter {
         float h = image.getHeight() / 2f;
         
         Vector pivot = s.getPivot();
-        
-        x = Camera.getMain().screenX(x);
-        y = Camera.getMain().screenY(y);
         
         AffineTransform transform = new AffineTransform(); 
 
@@ -114,11 +111,9 @@ public final class AWTSpriter extends Spriter {
     }
     
     @Override
-    public void fillRaw(int color, float x, float y, float width, float height) {       
+    protected void fillImpl(int color, float x, float y, float width, float height) {       
         AffineTransform old = graphics.getTransform();
         
-        x = Camera.getMain().screenX(x);
-        y = Camera.getMain().screenY(y);
         float scale = Camera.getMain().getScale();
         
         graphics.translate(x, y);

@@ -25,14 +25,22 @@ public abstract class Spriter {
     
     protected abstract SpriteSource getSource(String path);
     
-    public abstract void draw(Sprite s, float x, float y, double angle, float opacity);
+    protected abstract void drawImpl(Sprite s, float x, float y, double angle, float opacity);
+    
+    public final void draw(Sprite s, float x, float y, double angle, float opacity) {
+        drawImpl(s, Camera.getMain().screenX(x), Camera.getMain().screenY(y), angle, opacity);
+    }
     
     public final void draw(Sprite s, float x, float y, double angle) {
         draw(s, x, y, angle, s.getAlpha());
     }
     
     public abstract void clear();
-    public abstract void fillRaw(int color, float x, float y, float width, float height);
+    protected abstract void fillImpl(int color, float x, float y, float width, float height);
+    
+    public final void fillRaw(int color, float x, float y, float width, float height) {
+        fillImpl(color, Camera.getMain().screenX(x), Camera.getMain().screenY(y), width, height);
+    }
 
     public final void fillRaw(int color, Vector pos, float width, float height) {
         fillRaw(color, pos.x, pos.y, width, height);
