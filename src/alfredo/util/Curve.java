@@ -48,6 +48,10 @@ public class Curve {
         public Vector evaluate(float t) {
             return a.plus(b.times(t)).plus(c.times(t * t)).plus(d.times(t * t *t));
         }
+        
+        public Vector derivative(float t) {
+            return b.plus(c.times(2 * t)).plus(d.times(3 * t * t));
+        }
     }
     
     public final Vector[] controlPoints;
@@ -94,7 +98,7 @@ public class Curve {
         return result;
     }
     
-    private void calculate() {
+    public void calculate() {
         Vector[] solved = new Vector[controlPoints.length];
         for(int i = 0; i < solved.length; ++i) {
             solved[i] = new Vector();
@@ -123,11 +127,20 @@ public class Curve {
     }
     
     public Vector evaluate(float timestep) {
-        calculate();
-        
         int bucket = (int)(timestep * segments.length);
         if(bucket > segments.length - 1) { bucket = segments.length - 1; }
         
         return segments[bucket].evaluate(timestep * segments.length - bucket);
+    }
+    
+    public Vector derivative(float timestep) {
+        int bucket = (int)(timestep * segments.length);
+        if(bucket > segments.length - 1) { bucket = segments.length - 1; }
+        
+        return segments[bucket].derivative(timestep * segments.length - bucket);
+    }
+    
+    public float direction(float timestep) {
+        return derivative(timestep).getDirection();
     }
 }
