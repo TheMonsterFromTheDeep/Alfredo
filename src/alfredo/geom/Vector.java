@@ -105,6 +105,18 @@ public class Vector {
     public void subtractX(Vector dupli) { this.x -= dupli.x; cached = false; }
     public void subtractY(Vector dupli) { this.y -= dupli.y; cached = false; }
     
+    public Vector plus(Vector v) {
+        return new Vector(this.x + v.x, this.y + v.y);
+    }
+    
+    public Vector minus(Vector v) {
+        return new Vector(this.x - v.x, this.y - v.y);
+    }
+    
+    public Vector times(float scalar) {
+        return new Vector(this.x * scalar, this.y * scalar);
+    }
+    
     public void scale(float scalar) {
         this.x *= scalar;
         this.y *= scalar;
@@ -144,10 +156,14 @@ public class Vector {
     @Override
     public String toString() {
         //Only show two decimals worth of precision - I feel like this will be more useful for debugging
-        int xi = (int)Math.floor(x);
-        int xf = Math.round(x * 100) - 100 * xi;
-        int yi = (int)Math.floor(y);
-        int yf = Math.round(y * 100) - 100 * yi;
+        float xd = Math.abs(x);
+        float yd = Math.abs(y);
+        int xi = (int)Math.floor(xd);
+        int xf = Math.round(xd * 100) - 100 * xi;
+        int yi = (int)Math.floor(yd);
+        int yf = Math.round(yd * 100) - 100 * yi;
+        if(x < 0) { xi = -xi; }
+        if(y < 0) { yi = -yi; }
         return "Vector(" + xi + "." + xf + ", " + yi + "." + yf + ")";
     }
 }
