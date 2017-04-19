@@ -57,6 +57,13 @@ public class Curve {
     public final Vector[] controlPoints;
     private final Segment[] segments;
     
+    public Curve(float value) {
+        this.controlPoints = new Vector[] { new Vector(0, value), new Vector(1, value) };
+        segments = new Segment[1];
+        
+        calculate();
+    }
+    
     public Curve(Vector... controlPoints) {
         this.controlPoints = controlPoints;
         segments = new Segment[controlPoints.length - 1];

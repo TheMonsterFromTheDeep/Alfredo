@@ -84,12 +84,12 @@ public final class AWTSpriter extends Spriter {
     }
     
     @Override
-    protected void drawImpl(Sprite s, float x, float y, double angle, float opacity) {     
+    protected void drawImpl(Sprite s, float x, float y, float inScale, double angle, float opacity) {     
         BufferedImage image = dict.getAlways(s.getIndex());
 
         if(image == null) { return; }
         
-        float scale = Camera.getMain().getScale();
+        float scale = inScale;
         
         float w = image.getWidth() / 2f;
         float h = image.getHeight() / 2f;
