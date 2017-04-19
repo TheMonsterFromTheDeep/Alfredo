@@ -13,24 +13,14 @@ import java.util.ArrayList;
 public class Physics {
     public static final Vector gravity = new Vector(0, 9.807f);
     
-    public static void tick() {
-        Entity[] entities = Entity.getAllEntities();
-        
-        ArrayList<Body> bodies = new ArrayList();
-        
-        for(Entity e : entities) {
-            Body b = e.getComponent(Body.class);
-            
-            if(b != null) { bodies.add(b); }
-        }
-        
-        for(Body b : bodies) {
-            b.acceleration.set(gravity);
+    public static void tick() {           
+        for(Entity e : Entity.all(Body.class)) {
+            e.getComponent(Body.class).acceleration.set(gravity);
         }
         
         Scene.getCurrent().tick();
         
-        for(Entity e : entities) {
+        for(Entity e : Entity.all()) {
             for (Component c : e.getComponents()) {
                 c.tick();
             }

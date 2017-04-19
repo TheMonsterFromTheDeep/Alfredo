@@ -9,19 +9,61 @@ import java.util.Iterator;
  * @author TheMonsterOfTheDeep
  */
 public class Entity {
-    private static final ArrayList<Entity> entities = new ArrayList();
+    //private static final ArrayList<Entity> entities = new ArrayList();
+    private static Entity head = null;
+    private static Entity tail = null;
     
     public final Vector position;
     public double direction;
     private final ArrayList<Component> components;
+    private Entity previous = null;
+    private Entity next = null;
     
     public int tag = 0;
+    
+    private static void add(Entity e) {
+        if(head == null) {
+            head = tail = e;
+        }
+        else {
+            tail.next = e;
+            e.previous = tail;
+            tail = e;
+        }
+    }
+    
+    private static void insert(int index, Entity e) {
+        if(head == null) {
+            if(index == 0) {
+                add(e);
+            }
+            else {
+                throw new IllegalArgumentException("Inserting Entity at too great of index!");
+            }
+            return;
+        }
+        
+        Entity target = head;
+        while(index > 0) {
+            if(target.next == null) {
+                throw new IllegalArgumentException("Inserting Entity at too great of index!");
+            }
+            target = target.next;
+            --index;
+        }
+        if(target.previous != null) {
+            target.previous.next = e;
+            e.previous = target.previous;
+        }
+        e.next = target;
+        target.previous = e;
+    }
     
     public static <T extends Entity> T create(Vector position, double direction) {
         T newEntity = (T)new Entity(position, direction);
         newEntity.init();
         
-        entities.add(newEntity);
+        add(newEntity);
         
         return newEntity;
     }
@@ -38,7 +80,7 @@ public class Entity {
         T newEntity = (T)new Entity(new Vector(x, y), 0);
         newEntity.init();
         
-        entities.add(0, newEntity);
+        insert(0, newEntity);
         
         return newEntity;
     }
@@ -52,7 +94,7 @@ public class Entity {
     }
     
     public static void clear() {
-        entities.clear();
+        tail = head = null;
     }
     
     protected Entity(Vector position, double direction) {
@@ -123,25 +165,119 @@ public class Entity {
         for(Component c : components) {
             c.destroy();
         }
-        entities.remove(this);
+        if(previous != null) previous.next = next;
+        if(next     != null) next.previous = previous;
+        if(this == tail) {
+            tail = previous;
+        }
     }
     
-    public static Entity[] getAllEntities() {
-        return entities.toArray(new Entity[0]);
+    public static Iterable<Entity> all() {
+        return () -> new Iterator() {
+            Entity current = head;
+            
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
+            
+            @Override
+            public Object next() {
+                Entity next = current;
+                current = current.next;
+                return next;
+            }
+        };
+    }
+    
+    private static class ClassIterator<T extends Component> implements Iterator {
+        Entity current;
+        Class<T> type;
+        
+        private void find() {
+            if(current == null) {
+                return;
+            }
+            
+            while(current.getComponent(type) == null) {
+                if(current.next == null) {
+                    current = null;
+                    return;
+                }
+                current = current.next;
+            }
+        }
+        
+        public ClassIterator(Class<T> type) {
+            this.type = type;
+            current = head;
+            find();
+        }
+        
+        @Override
+        public boolean hasNext() {
+            return current != null;
+        }
+
+        @Override
+        public Object next() {
+            Entity next = current;
+            current = current.next;
+            find();
+            return next;
+        }
+    }
+    
+    public static <T extends Component> Iterable<Entity> all(Class<T> type) {
+        return () -> new ClassIterator(type);
+    }
+    
+    private static class TagIterator implements Iterator {
+        Entity current;
+        int tag;
+        
+        private void find() {
+            if(current == null) {
+                return;
+            }
+            
+            while(current.tag != tag) {
+                if(current.next == null) {
+                    current = null;
+                    return;
+                }
+                current = current.next;
+            }
+        }
+        
+        public TagIterator(int tag) {
+            this.tag = tag;
+            current = head;
+            find();
+        }
+        
+        @Override
+        public boolean hasNext() {
+            return current != null;
+        }
+
+        @Override
+        public Object next() {
+            Entity next = current;
+            current = current.next;
+            find();
+            return next;
+        }
+    }
+    
+    public static Iterable<Entity> all(int tag) {
+        return () -> new TagIterator(tag);
     }
     
     public static <T extends Component> Entity getWithComponent(Class<T> type) {
-        for(Entity e : entities) {
+        for(Entity e : all()) {
             if(e.getComponent(type) != null) { return e; }
         }
         return null;
-    }
-    
-    public static <T extends Component> Entity[] getAllWithComponent(Class<T> type) {
-        ArrayList<Entity> all = new ArrayList();
-        for(Entity e : entities) {
-            if(e.getComponent(type) != null) { all.add(e); }
-        }
-        return all.toArray(new Entity[0]);
     }
 }

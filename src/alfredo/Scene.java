@@ -57,8 +57,7 @@ public class Scene {
         
         backdrop(s);
         
-        Entity[] all = Entity.getAllEntities();
-        for(Entity e : all) {
+        for(Entity e : Entity.all()) {
             for(Component co : e.getComponents()) {
                 co.draw(s);
             }
