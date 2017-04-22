@@ -309,9 +309,20 @@ public class Entity {
         return () -> new TagIterator(tag);
     }
     
-    public static <T extends Component> Entity getWithComponent(Class<T> type) {
+    public static Entity first() {
+        return head;
+    }
+    
+    public static <T extends Component> Entity first(Class<T> type) {
         for(Entity e : all()) {
             if(e.getComponent(type) != null) { return e; }
+        }
+        return null;
+    }
+    
+    public static Entity first(int tag) {
+        for(Entity e : all()) {
+            if(e.tag == tag) { return e; }
         }
         return null;
     }
