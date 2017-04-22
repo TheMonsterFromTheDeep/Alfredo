@@ -36,7 +36,7 @@ public abstract class Spriter {
     }
     
     public final void draw(Sprite s, float x, float y, double angle) {
-        draw(s, x, y, 1, angle, s.getAlpha());
+        draw(s, x, y, 1, angle, s.alpha);
     }
     
     public final void draw(Sprite s, float x, float y) {
