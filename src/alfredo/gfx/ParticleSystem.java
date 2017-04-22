@@ -25,6 +25,7 @@ package alfredo.gfx;
 
 import alfredo.Component;
 import alfredo.Entity;
+import alfredo.Rand;
 import alfredo.geom.Vector;
 import alfredo.util.Curve;
 import java.util.ArrayList;
@@ -49,8 +50,6 @@ public class ParticleSystem extends Component {
     private Sprite particle;
     
     private final ArrayList<Particle> particles;
-    
-    private Random random = new Random(); /* TODO: Use one global random */
     
     public static ParticleSystem create(Vector center, Sprite particle) {
         Entity parent = Entity.create(center);
@@ -111,7 +110,7 @@ public class ParticleSystem extends Component {
     public void tick() {
         if(length > 0) {
             for(int i = 0; i < rate; ++i) {
-                Particle p = new Particle(parent.position, Vector.fromDirection(1, random.nextFloat() * 360), lifetime);
+                Particle p = new Particle(parent.position, Vector.fromDirection(1, Rand.f(0, 360)), lifetime);
                 particles.add(p);
             }
         }

@@ -21,6 +21,8 @@ public class Entity {
     
     public int tag = 0;
     
+    private static int count = 0;
+    
     private static void add(Entity e) {
         if(head == null) {
             head = tail = e;
@@ -30,9 +32,10 @@ public class Entity {
             e.previous = tail;
             tail = e;
         }
+        ++count;
     }
     
-    private static void insert(int index, Entity e) {
+    private static void insert(int index, Entity e) { 
         if(head == null) {
             if(index == 0) {
                 add(e);
@@ -57,6 +60,7 @@ public class Entity {
         }
         e.next = target;
         target.previous = e;
+        ++count; //Only increment count if successful
     }
     
     public static <T extends Entity> T create(Vector position, double direction) {
@@ -95,6 +99,7 @@ public class Entity {
     
     public static void clear() {
         tail = head = null;
+        count = 0;
     }
     
     protected Entity(Vector position, double direction) {
@@ -170,6 +175,7 @@ public class Entity {
         if(this == tail) {
             tail = previous;
         }
+        count = 0;
     }
     
     public static Iterable<Entity> all() {
@@ -188,6 +194,16 @@ public class Entity {
                 return next;
             }
         };
+    }
+    
+    public static Entity random() {
+        if(count == 0) { return null; }
+        int index = Rand.i(0, count - 1);
+        for(Entity e : all()) {
+            if(index == 0) { return e; }
+            --index;
+        }
+        return null;
     }
     
     private static class ClassIterator<T extends Component> implements Iterator {
@@ -230,6 +246,25 @@ public class Entity {
     
     public static <T extends Component> Iterable<Entity> all(Class<T> type) {
         return () -> new ClassIterator(type);
+    }
+    
+    public static <T extends Component> Entity random(Class<T> type) {
+        Iterable<Entity> ents = all(type);
+        Iterator i = ents.iterator();
+        int index = 0;
+        while(i.hasNext()) {
+            ++index;
+            i.next();
+        }
+        if(index == 0) { return null; }
+        index = Rand.i(0, index - 1);
+        for(Entity e : ents) {
+            if(index == 0) {
+                return e;
+            }
+            --index;
+        }
+        return null;
     }
     
     private static class TagIterator implements Iterator {
