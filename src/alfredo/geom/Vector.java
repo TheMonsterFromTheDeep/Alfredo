@@ -1,5 +1,7 @@
 package alfredo.geom;
 
+import alfredo.Rand;
+
 /**
  *
  * @author TheMonsterOfTheDeep
@@ -11,6 +13,14 @@ public class Vector {
     private boolean cached = false;
     private float magnitude;
     private float direction;
+    
+    public static Vector random(float sx, float sy, float ex, float ey) {
+        return new Vector(Rand.f(sx, ex), Rand.f(sy, ey));
+    }
+    
+    public static Vector random(Vector start, Vector end) {
+        return random(start.x, start.y, end.x, end.y);
+    }
     
     public static Vector fromDirection(float length, float direction) {
         return new Vector(length * (float)Math.cos(Math.toRadians(direction)), length * (float)Math.sin(Math.toRadians(direction)));
