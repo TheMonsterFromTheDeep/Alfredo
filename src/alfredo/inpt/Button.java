@@ -1,5 +1,7 @@
 package alfredo.inpt;
 
+import alfredo.Debug;
+import alfredo.Scene;
 import java.util.ArrayList;
 
 /**
@@ -46,22 +48,38 @@ public final class Button {
         }
     }
     
+    private static class SpecificAction {
+        Action action;
+        Scene scene;
+        
+        public SpecificAction(Action action) {
+            this.action = action;
+            this.scene = Scene.getCurrent();
+        }
+        
+        void perform() {
+            if(Scene.getCurrent() == scene) {
+                action.perform();
+            }
+        }
+    }
+    
     private Source device = null;
     private boolean pressed = false;
     
-    private final ArrayList<Action> downActions = new ArrayList();
-    private final ArrayList<Action> upActions = new ArrayList();
+    private final ArrayList<SpecificAction> downActions = new ArrayList();
+    private final ArrayList<SpecificAction> upActions = new ArrayList();
     
     private void performPress() {
         pressed = true;
-        for(Action act : downActions) {
+        for(SpecificAction act : downActions) {
             act.perform();
         }
     }
     
     private void performRelease() {
         pressed = false;
-        for(Action act : upActions) {
+        for(SpecificAction act : upActions) {
             act.perform();
         }
     }
@@ -71,12 +89,12 @@ public final class Button {
     }
     
     public Button press(Action act) {
-        downActions.add(act);
+        downActions.add(new SpecificAction(act));
         return this;
     }
     
     public Button release(Action act) {
-        upActions.add(act);
+        upActions.add(new SpecificAction(act));
         return this;
     }
     

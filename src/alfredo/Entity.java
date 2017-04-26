@@ -1,8 +1,11 @@
 package alfredo;
 
 import alfredo.geom.Vector;
+import alfredo.util.F;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
+import java.util.function.Predicate;
 
 /**
  *
@@ -18,6 +21,10 @@ public class Entity {
     private final ArrayList<Component> components;
     private Entity previous = null;
     private Entity next = null;
+    
+    private boolean alive = true;
+    
+    public boolean isAlive() { return alive; }
     
     public int tag = 0;
     
@@ -58,6 +65,9 @@ public class Entity {
             target.previous.next = e;
             e.previous = target.previous;
         }
+        if(target == head) {
+            head = e;
+        }
         e.next = target;
         target.previous = e;
         ++count; //Only increment count if successful
@@ -89,7 +99,12 @@ public class Entity {
         return newEntity;
     }
     
+    public static <T extends Entity> T insert() {
+        return insert(0, 0);
+    }
+    
     public static <T extends Entity> T create(Entity old) {
+        if(old == null) return create(0, 0);
         return create(old.position, old.direction);
     }
     
@@ -154,6 +169,11 @@ public class Entity {
         return null;
     }
     
+    public void removeComponent(Component target) {
+        target.destroy();
+        components.remove(target);
+    }
+    
     public final void move(float distance) {
         position.add((float)(distance * Math.cos(Math.toRadians(direction))), (float)(distance * Math.sin(Math.toRadians(direction))));
     }
@@ -167,6 +187,9 @@ public class Entity {
     }
     
     public final void destroy() {
+        if(!alive) return;
+        
+        alive = false;
         for(Component c : components) {
             c.destroy();
         }
@@ -323,6 +346,66 @@ public class Entity {
     public static Entity first(int tag) {
         for(Entity e : all()) {
             if(e.tag == tag) { return e; }
+        }
+        return null;
+    }
+    
+    public static interface SortComparison {
+        int compare(Entity a, Entity b);
+    }
+    
+    public static void sort(SortComparison comp) {
+        ArrayList<Entity> ents = new ArrayList();
+        for(Entity e : all()) {
+            ents.add(e);
+        }
+        ents.sort((Object o1, Object o2) -> comp.compare((Entity)o1, (Entity)o2));
+        
+        if(ents.size() == 0) { return; }
+        
+        head = ents.get(0);
+        head.previous = null;
+        for(int i = 0; i < ents.size() - 1; ++i) {
+            ents.get(i).next = ents.get(i + 1);
+            ents.get(i + 1).previous = ents.get(i);
+        }
+        tail = ents.get(ents.size() - 1);
+        tail.next = null;
+    }
+    
+    public Entity closest(int tag) {
+        Entity closest = Entity.first(tag);
+        if(closest == null) { return null; }
+        float record = F.euler(closest.position.minus(position));
+        
+        for(Entity e : all(tag)) {
+            if(F.euler(e.position.minus(position)) < record) {
+                closest = e;
+                record = F.euler(e.position.minus(position));
+            }
+        }
+        
+        return closest;
+    }
+    
+    public <T extends Component> Entity closest(Class<T> type) {
+        Entity closest = Entity.first(type);
+        if(closest == null) { return null; }
+        float record = F.euler(closest.position.minus(position));
+        
+        for(Entity e : all(type)) {
+            if(F.euler(e.position.minus(position)) < record) {
+                closest = e;
+                record = F.euler(e.position.minus(position));
+            }
+        }
+        
+        return closest;
+    }
+    
+    public <T extends Component> Entity firstOther(Class<T> type) {
+        for(Entity e : all()) {
+            if(e.getComponent(type) != null && e != this) { return e; }
         }
         return null;
     }

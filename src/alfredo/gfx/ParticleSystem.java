@@ -138,7 +138,7 @@ public class ParticleSystem extends Component {
     }
     
     @Override
-    public void draw(Spriter g) {
+    public void ui(Spriter g) {
         for(Particle p : particles) {
             g.draw(particle, p.x, p.y, p.size, 0, p.alpha);
         }

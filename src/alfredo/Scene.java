@@ -23,6 +23,7 @@ public class Scene {
             for(Scene s : scenes) {
                 if(s.getClass() == sceneClass) {
                     current = s;
+                    s.opened();
                     return;
                 }
             }
@@ -33,6 +34,8 @@ public class Scene {
             System.out.println("Error setting scene: " + ex);
         }
         scenes.add(current);
+        current.setup();
+        current.opened();
     }
     
     public static <T extends Scene> T get(Class<T> sceneClass) {
@@ -63,6 +66,12 @@ public class Scene {
             }
         }
         
+        for(Entity e : Entity.all()) {
+            for(Component co : e.getComponents()) {
+                co.ui(s);
+            }
+        }
+        
         draw(s);
     }
     
@@ -70,6 +79,8 @@ public class Scene {
         Physics.tick();
     }
     
+    protected void setup() { }
+    protected void opened() { }
     public void tick() { }
     public void backdrop(Spriter s) { }
     public void draw(Spriter s) { }

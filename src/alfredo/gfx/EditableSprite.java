@@ -21,48 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package alfredo.util;
+package alfredo.gfx;
 
 import alfredo.geom.Vector;
 
 /**
- * Provides wrapper methods around Math functions that cast their results to floats.
+ *
  * @author TheMonsterOfTheDeep
  */
-public class F {
-    public static float sin(float x) {
-        return (float)Math.sin(x);
+public abstract class EditableSprite extends Sprite {
+    public EditableSprite(int index, Vector pivot, int width, int height) {
+        super(index, pivot, width, height);
     }
     
-    public static float cos(float x) {
-        return (float)Math.cos(x);
-    }
-    
-    public static float tan(float x) {
-        return (float)Math.tan(x);
-    }
-    
-    public static float sqrt(float x) {
-        return (float)Math.sqrt(x);
-    }
-    
-    public static float euler(float x, float y) {
-        return x * x + y * y;
-    }
-    
-    public static float euler(Vector v) {
-        return euler(v.x, v.y);
-    }
-    
-    public static float sq(float x) {
-        return x * x;
-    }
-
-    public static int floor(float f) {
-        return (int) Math.floor(f);
-    }
-    
-    public static int round(float f) {
-        return (int) Math.round(f);
+    public abstract void set(int x, int y, int rgb);
+    public final void set(float x, float y, int rgb) {
+        set((int)x, (int)y, rgb);
     }
 }

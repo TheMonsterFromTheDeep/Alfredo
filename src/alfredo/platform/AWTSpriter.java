@@ -2,10 +2,12 @@ package alfredo.platform;
 
 import alfredo.Camera;
 import alfredo.geom.Vector;
+import alfredo.gfx.EditableSprite;
 import alfredo.gfx.Sprite;
 import alfredo.util.IndexedStringDict;
 import alfredo.gfx.SpriteSource;
 import alfredo.gfx.Spriter;
+import alfredo.gfx.Texture;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Composite;
@@ -79,8 +81,9 @@ public final class AWTSpriter extends Spriter {
     
     @Override
     protected SpriteSource getSource(String path) {
-        //I literally created the Or class just so this line is nice and expressive
-        return new SpriteSource(dict.indexOf(path).or(() -> dict.add(path, loadSprite(path))));
+        //I literally created the Or class just so this line is nice and expressive\
+        int index = dict.indexOf(path).or(() -> dict.add(path, loadSprite(path)));
+        return new SpriteSource(index, dict.getAlways(index).getWidth(), dict.getAlways(index).getHeight());
     }
     
     @Override
@@ -134,5 +137,38 @@ public final class AWTSpriter extends Spriter {
     public void clear() {
         graphics.setColor(Color.BLACK);
         graphics.fillRect(0, 0, buffer.getWidth(), buffer.getHeight());
+    }
+
+    @Override
+    protected EditableSprite getEditable(String path) {
+        int index = dict.add(path, loadSprite(path));
+        return new EditableSprite(index, new Vector(), dict.getAlways(index).getWidth(), dict.getAlways(index).getHeight()) {
+            @Override
+            public void set(int x, int y, int rgb) {
+                dict.getAlways(getIndex()).setRGB(x, y, rgb);
+            }
+        };
+    }
+    
+    @Override
+    protected EditableSprite getEditable(Vector size) {
+        return new EditableSprite(dict.add("", new BufferedImage((int)size.x, (int)size.y, BufferedImage.TYPE_INT_ARGB)), new Vector(), (int)size.x, (int)size.y) {
+            @Override
+            public void set(int x, int y, int rgb) {
+                dict.getAlways(getIndex()).setRGB(x, y, rgb);
+            }
+        };
+    }
+    
+    @Override
+    protected Texture getTexture(String path) {
+        int index = dict.indexOf(path).or(() -> dict.add(path, loadSprite(path)));
+        return new Texture(index, new Vector(), dict.getAlways(index).getWidth(), dict.getAlways(index).getHeight()) {
+            @Override
+            public int get(int x, int y) {
+                BufferedImage image = dict.getAlways(getIndex());
+                return image.getRGB(x % image.getWidth(), y % image.getHeight());
+            }
+        };
     }
 }

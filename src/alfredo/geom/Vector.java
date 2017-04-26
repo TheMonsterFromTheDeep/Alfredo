@@ -176,4 +176,8 @@ public class Vector {
         if(y < 0) { yi = -yi; }
         return "Vector(" + xi + "." + xf + ", " + yi + "." + yf + ")";
     }
+    
+    public boolean equal(Vector v) {
+        return v.x == x && v.y == y;
+    }
 }
