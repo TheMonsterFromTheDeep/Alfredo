@@ -30,16 +30,54 @@ import alfredo.geom.Vector;
  * @author TheMonsterOfTheDeep
  */
 public class F {
-    public static float sin(float x) {
+    public static float threshold = 1e-6f;
+    
+    public static boolean equals(float a, float b) {
+        return Math.abs(b - a) < threshold;
+    }
+    
+    public static float max(float... args) {
+        float max = args[0];
+        for(float x : args) {
+            if(x > max) { max = x; }
+        }
+        return max;
+    }
+    
+    public static float min(float... args) {
+        float min = args[0];
+        for(float x : args) {
+            if(x < min) { min = x; }
+        }
+        return min;
+    }
+    
+    public static float rsin(float x) {
         return (float)Math.sin(x);
     }
     
-    public static float cos(float x) {
+    public static float rcos(float x) {
         return (float)Math.cos(x);
     }
     
-    public static float tan(float x) {
+    public static float rtan(float x) {
         return (float)Math.tan(x);
+    }
+    
+    public static float rad(float deg) {
+        return (float)Math.toRadians(deg);
+    }
+    
+    public static float sin(float x) {
+        return rsin(rad(x));
+    }
+    
+    public static float cos(float x) {
+        return rcos(rad(x));
+    }
+    
+    public static float tan(float x) {
+        return rtan(rad(x));
     }
     
     public static float sqrt(float x) {
@@ -60,6 +98,10 @@ public class F {
 
     public static int floor(float f) {
         return (int) Math.floor(f);
+    }
+    
+    public static int ceil(float f) {
+        return (int) Math.ceil(f);
     }
     
     public static int round(float f) {

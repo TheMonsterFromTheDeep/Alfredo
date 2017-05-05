@@ -1,6 +1,7 @@
 package alfredo.geom;
 
 import alfredo.Rand;
+import alfredo.util.F;
 
 /**
  *
@@ -160,7 +161,15 @@ public class Vector {
     }
     
     public float distance(Vector other) {
-        return (float) Math.sqrt( (other.x - x) * (other.x - x) + (other.y - y) * (other.y - y) );
+        return F.sqrt(F.sq(other.x - x) + F.sq(other.y - y));
+    }
+    
+    public boolean smaller(Vector other) {
+        return F.euler(this) < F.euler(other);
+    }
+    
+    public boolean greater(Vector other) {
+        return F.euler(this) > F.euler(other);
     }
     
     @Override
@@ -177,7 +186,7 @@ public class Vector {
         return "Vector(" + xi + "." + xf + ", " + yi + "." + yf + ")";
     }
     
-    public boolean equal(Vector v) {
-        return v.x == x && v.y == y;
+    public boolean equal(Vector other) {
+        return F.equals(other.x, x) && F.equals(other.y, y);
     }
 }
