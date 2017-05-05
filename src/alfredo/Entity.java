@@ -5,6 +5,7 @@ import alfredo.util.F;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
@@ -408,5 +409,9 @@ public class Entity {
             if(e.getComponent(type) != null && e != this) { return e; }
         }
         return null;
+    }
+    
+    public static void every(Consumer <? super Entity> action) {
+        all().forEach(action);
     }
 }
