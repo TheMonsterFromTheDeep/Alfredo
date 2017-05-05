@@ -63,50 +63,6 @@ public abstract class Spriter {
         drawImpl(s, Camera.getMain().screenX(x), Camera.getMain().screenY(y), scale * Camera.getMain().getScale(), angle, opacity);
     }
     
-    public final void draw(Sprite s, Entity e) {
-        draw(s, e.position.x, e.position.y, 1, e.direction, s.alpha);
-    }
-    
-    public final void draw(Sprite s, Entity e, float scale) {
-        draw(s, e.position.x, e.position.y, scale, e.direction, s.alpha);
-    }
-    
-    public final void drawDir(Sprite s, Entity e, double direction) {
-         draw(s, e.position.x, e.position.y, 1, direction, s.alpha);
-    }
-    
-    public void draw(Sprite s, Vector v) {
-        draw(s, v.x, v.y, 1, 0, s.alpha);
-    }
-    
-    public void draw(Sprite s, Vector v, float scale) {
-        draw(s, v.x, v.y, scale, 0, s.alpha);
-    }
-    
-    public void draw(Sprite s, Vector v, double direction, float scale) {
-        draw(s, v.x, v.y, scale, direction, s.alpha);
-    }
-    
-    public final void draw(Sprite s, float x, float y, double angle, float opacity) {
-        draw(s, x, y, 1, angle, opacity);
-    }
-    
-    public final void draw(Sprite s, float x, float y, double angle) {
-        draw(s, x, y, 1, angle, s.alpha);
-    }
-    
-    public final void drawScale(Sprite s, float x, float y, float scale) {
-        draw(s, x, y, scale, 0, s.alpha);
-    }
-    
-    public final void draw(Sprite s, float x, float y) {
-        draw(s, x, y, 0);
-    }
-    
-    /*public final void draw(Sprite s, float x, float y, float opacity) {
-        draw(s, x, y, 0, opacity);
-    }*/
-    
     public abstract void clear();
     protected abstract void fillImpl(int color, float x, float y, float width, float height);
     

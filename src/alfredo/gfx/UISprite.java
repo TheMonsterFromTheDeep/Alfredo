@@ -38,7 +38,7 @@ class UISprite extends Sprite {
     @Override
     public void ui(Spriter s) {
         if(active) {
-            s.draw(this, parent);
+            paint(s);
         }
     }
 }

@@ -140,7 +140,7 @@ public class ParticleSystem extends Component {
     @Override
     public void ui(Spriter g) {
         for(Particle p : particles) {
-            g.draw(particle, p.x, p.y, p.size, 0, p.alpha);
+            particle.at(p.x, p.y).scale(p.size).dir(0).alpha(p.alpha).paint(g);
         }
     }
 }

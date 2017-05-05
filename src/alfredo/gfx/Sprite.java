@@ -1,6 +1,7 @@
 package alfredo.gfx;
 
 import alfredo.Component;
+import alfredo.Entity;
 import alfredo.geom.Vector;
 
 /**
@@ -30,7 +31,7 @@ public class Sprite extends Component {
     @Override
     public void draw(Spriter s) {
         if(active) {
-            s.draw(this, parent.position.x, parent.position.y, parent.direction);
+            paint(s);
         }
     }
     
@@ -46,5 +47,33 @@ public class Sprite extends Component {
     public boolean contains(Vector point, Vector center) {
         return point.x >= center.x - width / 2 && point.x <= center.x + width / 2 &&
                point.y >= center.y  - height / 2&& point.y <= center.y + height / 2;
+    }
+    
+    public void paint(Spriter s) {
+        new Context(this).paint(s);
+    }
+    
+    public Context at(float x, float y) {
+        return new Context(this).at(x, y);
+    }
+    
+    public Context at(Vector pos) {
+        return new Context(this).at(pos);
+    }
+    
+    public Context at(Entity e) {
+        return new Context(this).at(e);
+    }
+    
+    public Context alpha(float alpha) {
+        return new Context(this).alpha(alpha);
+    }
+    
+    public Context scale(float scale) {
+        return new Context(this).scale(scale);
+    }
+    
+    public Context dir(double dir) {
+        return new Context(this).dir(dir);
     }
 }
