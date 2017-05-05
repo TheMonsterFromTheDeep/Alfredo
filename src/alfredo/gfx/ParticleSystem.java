@@ -43,9 +43,10 @@ public class ParticleSystem extends Component {
     /* in ticks */
     private int lifetime = 100;
     /* in particles / tick */
-    public int rate = 5; /* TODO: Make rates have finer control */
+    private Curve rate = new Curve(5); /* TODO: Make rates have finer control */
     /* in ticks */
-    public int length = 100;
+    private int length = 100;
+    private int totalLength = length;
     
     private Sprite particle;
     
@@ -97,19 +98,26 @@ public class ParticleSystem extends Component {
     }
     
     public ParticleSystem length(int length) {
-        this.length = length;
+        this.length = this.totalLength = length;
         return this;
     }
     
-    public ParticleSystem rate(int rate) {
-        this.rate = rate;
+    public ParticleSystem rate(Vector... points) {
+        this.rate = new Curve(points);
+        return this;
+    }
+    
+    public ParticleSystem rate(float rate) {
+        this.rate = new Curve(rate);
         return this;
     }
     
     @Override
     public void tick() {
         if(length > 0) {
-            for(int i = 0; i < rate; ++i) {
+            float currentRate = rate.evaluate(1 - ((float)length / totalLength)).y;
+            
+            for(int i = 0; i < currentRate; ++i) {
                 Particle p = new Particle(parent.position, Vector.fromDirection(1, Rand.f(0, 360)), lifetime);
                 particles.add(p);
             }
