@@ -40,8 +40,8 @@ public class Sprite extends Component {
     }
     
     public boolean contains(Vector point) {
-        return point.x >= parent.position.x && point.x <= parent.position.x + width &&
-               point.y >= parent.position.y && point.y <= parent.position.y + height;
+        return point.x >= parent.transform.x && point.x <= parent.transform.x + width &&
+               point.y >= parent.transform.y && point.y <= parent.transform.y + height;
     }
     
     public boolean contains(Vector point, Vector center) {

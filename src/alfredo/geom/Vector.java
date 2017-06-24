@@ -13,7 +13,7 @@ public class Vector {
     
     private boolean cached = false;
     private float magnitude;
-    private float direction;
+    private float angle;
     
     public static Vector random(float sx, float sy, float ex, float ey) {
         return new Vector(Rand.f(sx, ex), Rand.f(sy, ey));
@@ -30,7 +30,7 @@ public class Vector {
     private void checkCache() {
         if(!cached) {
             magnitude = (float)Math.sqrt(x * x + y * y);
-            direction = (float)Math.toDegrees(Math.atan2(y, x));
+            angle = (float)Math.toDegrees(Math.atan2(y, x));
             cached = true;
         }
     }
@@ -150,14 +150,14 @@ public class Vector {
         y += distance * Math.sin(Math.toRadians(direction));
     }
     
-    public float getMagnitude() {
+    public float magnitude() {
         checkCache();
         return magnitude;
     }
     
-    public float getDirection() {
+    public float angle() {
         checkCache();
-        return direction;
+        return angle;
     }
     
     public float distance(Vector other) {

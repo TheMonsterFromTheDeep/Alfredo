@@ -118,7 +118,7 @@ public class ParticleSystem extends Component {
             float currentRate = rate.evaluate(1 - ((float)length / totalLength)).y;
             
             for(int i = 0; i < currentRate; ++i) {
-                Particle p = new Particle(parent.position, Vector.fromDirection(1, Rand.f(0, 360)), lifetime);
+                Particle p = new Particle(parent.transform, Vector.fromDirection(1, Rand.f(0, 360)), lifetime);
                 particles.add(p);
             }
         }

@@ -12,6 +12,7 @@ import java.util.ArrayList;
  */
 public class Physics {
     public static final Vector gravity = new Vector(0, 9.807f);
+    public static float metersPerPixel = 1 / 16f;
     
     public static void tick() {           
         for(Entity e : Entity.all(Body.class)) {

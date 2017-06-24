@@ -36,8 +36,8 @@ public class Body extends Component {
     @Override
     public void tick() {
         float delay = Game.getDelay() / 1000f;
-        velocity.add(acceleration.x * delay, acceleration.y * delay);
-        parent.position.add(velocity.x, velocity.y);
+        velocity.add(acceleration.x, acceleration.y);
+        parent.transform.add(velocity.x * Physics.metersPerPixel, velocity.y * Physics.metersPerPixel);
     }
     
     public void addForce(Vector force) {

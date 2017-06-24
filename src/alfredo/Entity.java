@@ -1,5 +1,6 @@
 package alfredo;
 
+import alfredo.geom.Transform;
 import alfredo.geom.Vector;
 import alfredo.util.F;
 import java.util.ArrayList;
@@ -17,8 +18,7 @@ public class Entity {
     private static Entity head = null;
     private static Entity tail = null;
     
-    public final Vector position;
-    public double direction;
+    public final Transform transform;
     private final ArrayList<Component> components;
     private Entity previous = null;
     private Entity next = null;
@@ -106,7 +106,7 @@ public class Entity {
     
     public static <T extends Entity> T create(Entity old) {
         if(old == null) return create(0, 0);
-        return create(old.position, old.direction);
+        return create(old.transform, old.transform.direction);
     }
     
     public static <T extends Entity> T create() {
@@ -119,8 +119,7 @@ public class Entity {
     }
     
     protected Entity(Vector position, double direction) {
-        this.position = new Vector(position);
-        this.direction = direction;
+        transform = new Transform(position, direction);
         components = new ArrayList();
     }
     
@@ -176,11 +175,11 @@ public class Entity {
     }
     
     public final void move(float distance) {
-        position.add((float)(distance * Math.cos(Math.toRadians(direction))), (float)(distance * Math.sin(Math.toRadians(direction))));
+        transform.move(distance);
     }
     
     public final void moveNormal(float distance) {
-        position.add((float)(distance * Math.sin(Math.toRadians(direction))), (float)(distance * Math.cos(Math.toRadians(direction))));
+        transform.moveNormal(distance);
     }
     
     public final Component[] getComponents() {
@@ -377,12 +376,12 @@ public class Entity {
     public Entity closest(int tag) {
         Entity closest = Entity.first(tag);
         if(closest == null) { return null; }
-        float record = F.euler(closest.position.minus(position));
+        float record = F.euler(closest.transform.minus(transform));
         
         for(Entity e : all(tag)) {
-            if(F.euler(e.position.minus(position)) < record) {
+            if(F.euler(e.transform.minus(transform)) < record) {
                 closest = e;
-                record = F.euler(e.position.minus(position));
+                record = F.euler(e.transform.minus(transform));
             }
         }
         
@@ -392,12 +391,12 @@ public class Entity {
     public <T extends Component> Entity closest(Class<T> type) {
         Entity closest = Entity.first(type);
         if(closest == null) { return null; }
-        float record = F.euler(closest.position.minus(position));
+        float record = F.euler(closest.transform.minus(transform));
         
         for(Entity e : all(type)) {
-            if(F.euler(e.position.minus(position)) < record) {
+            if(F.euler(e.transform.minus(transform)) < record) {
                 closest = e;
-                record = F.euler(e.position.minus(position));
+                record = F.euler(e.transform.minus(transform));
             }
         }
         

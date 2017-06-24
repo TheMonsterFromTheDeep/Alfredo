@@ -148,6 +148,6 @@ public class Curve {
     }
     
     public float direction(float timestep) {
-        return derivative(timestep).getDirection();
+        return derivative(timestep).angle();
     }
 }

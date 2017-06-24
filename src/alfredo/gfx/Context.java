@@ -24,6 +24,7 @@
 package alfredo.gfx;
 
 import alfredo.Entity;
+import alfredo.geom.Transform;
 import alfredo.geom.Vector;
 
 /**
@@ -33,35 +34,32 @@ import alfredo.geom.Vector;
 public class Context {
     private Sprite sprite;
     
-    public final Vector position;
+    public final Transform transform;
     public float alpha;
     public float scale;
-    public double direction;
     
     public Context(Sprite s) {
         this.sprite = s;
         
         Entity parent = s.getParent();
-        position = parent == null ? new Vector() : new Vector(parent.position);
-        direction = parent == null ? 0 : parent.direction;
+        transform = parent == null ? new Transform() : new Transform(parent.transform);
         
         alpha = s.alpha;
         scale = 1;
     }
     
     public Context at(float x, float y) {
-        position.set(x, y);
+        transform.set(x, y);
         return this;
     }
     
     public Context at(Vector pos) {
-        position.set(pos);
+        transform.set(pos);
         return this;
     }
     
     public Context at(Entity e) {
-        position.set(e.position);
-        direction = e.direction;
+        transform.set(e.transform);
         return this;
     }
     
@@ -76,11 +74,11 @@ public class Context {
     }
     
     public Context dir(double direction) {
-        this.direction = direction;
+        transform.direct(direction);
         return this;
     }
     
     public void paint(Spriter s) {
-        s.draw(sprite, position.x, position.y, scale, direction, alpha);
+        s.draw(sprite, transform.x, transform.y, scale, transform.direction, alpha);
     }
 }
